@@ -1,19 +1,43 @@
 import React, { useState, useEffect } from "react";
 import AuthTemplate from "../../components/templates/AuthTemplate";
-import { Html5QrcodeScanner } from 'html5-qrcode';
-import { Link } from "react-router-dom";
+import { Html5QrcodeScanner } from "html5-qrcode";
+import { useNavigate } from "react-router-dom";
+
+import { loginAPI } from "../../services/api/auth";
+import { setLocalStorage } from "../../functions/LocalStorage";
 
 function LoginPage() {
   const [selectedBtn, setSelectedBtn] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [qrResult, setQrResult] = useState();
+  const [sala, setSala] = useState(301);
+  const [edificio, setEdificio] = useState("A2");
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de inicio de sesión simulada
-    alert("Inicio de sesión simulado");
-    push;
+    try {
+      const res = await loginAPI(email, password);
+      if (res.status === 200) {
+        console.log(res.data);
+        setLocalStorage("user", {
+          rut: res.data.rut,
+          correo: res.data.correo,
+          rol: res.data.rol,
+          nombre: res.data.nombre
+        });
+        if (res.data.rol === "Secretario") {
+          navigate("/lectorExcel");
+        } else if (res.data.rol === "Admin") {
+          navigate("/histSalas");
+        }
+      }
+    } catch (error) {
+      console.log(error.data)
+      alert("Inicio de sesión fallido");
+    }
   };
 
   useEffect(() => {
@@ -22,11 +46,11 @@ function LoginPage() {
         setQrResult(result);
         scanner.clear();
       };
-  
+
       const error = (err) => {
         console.warn(err);
       };
-  
+
       const scanner = new Html5QrcodeScanner(
         "reader",
         { fps: 10, qrbox: 120 },
@@ -105,17 +129,18 @@ function LoginPage() {
                 </div>
                 <div className="flex  flex-row justify-around flex-wrap">
                   <button
+                    type="button"
                     onClick={() => setSelectedBtn("")}
                     className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
                   >
                     Volver
                   </button>
-                  <Link
-                    to="/lectorExcel"
+                  <button
+                    type="submit"
                     className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
                   >
                     Iniciar Sesión
-                  </Link>
+                  </button>
                 </div>
               </form>
             )}
@@ -123,7 +148,8 @@ function LoginPage() {
             {selectedBtn === "qrButton" && (
               <div className="flex flex-col space-y-4 gap-4">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  Escanea el QR del carnet para habilitar sala
+                  Escanea el QR del carnet para ingresar a la sala {edificio},{" "}
+                  {sala}
                 </h2>
                 <div>
                   {qrResult ? (
