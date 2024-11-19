@@ -61,7 +61,7 @@ function LoginPage() {
                 </a>
               </div>
               <Link
-                to="/lectorExcel"
+                to="/histSalas"
                 className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
               >
                 Iniciar Sesión
