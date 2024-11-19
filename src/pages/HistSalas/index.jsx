@@ -1,17 +1,13 @@
 import Ropita from "../../components/templates/Ropita";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { config } from "../../config";
 
 const HistSalas = () => {
   const [salas, setSalas] = useState([]);
 
-  // Configuraci贸n de Supabase
-  const supabaseUrl = "";
-  const supabaseKey = "";
+  const supabase = createClient(config.supabaseUrl, config.supabaseKey);
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  // Funci贸n para obtener datos de la tabla programacion_academica
   const cargarSalas = async () => {
     try {
       const { data, error } = await supabase
