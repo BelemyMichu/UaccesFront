@@ -15,5 +15,5 @@ export const leerExcel = (file, setExcelData) => {
     console.log(jsonData);
   };
 
-  reader.readAsArrayBuffer(file); // Leer el archivo como array buffer
+  reader.readAsArrayBuffer(file);
 };

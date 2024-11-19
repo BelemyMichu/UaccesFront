@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthTemplate from "../../components/templates/AuthTemplate";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ function LoginPage() {
     e.preventDefault();
     // Lógica de inicio de sesión simulada
     alert("Inicio de sesión simulado");
+    push;
   };
 
   return (
@@ -20,11 +22,7 @@ function LoginPage() {
             <h1 className="text-3xl font-bold text-gray-800 mb-4">
               ¡Bienvenido a Uaccess!
             </h1>
-            <img 
-              src="/image_12_1.png" 
-              alt="Lock Icon" 
-              className="w-200 h-20" 
-            />
+            <img src="/image_12_1.png" alt="Lock Icon" className="w-200 h-20" />
           </div>
 
           {/* Formulario de inicio de sesión */}
@@ -62,12 +60,12 @@ function LoginPage() {
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
-              <button
-                type="submit"
+              <Link
+                to="/lectorExcel"
                 className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
               >
                 Iniciar Sesión
-              </button>
+              </Link>
             </form>
           </div>
         </div>

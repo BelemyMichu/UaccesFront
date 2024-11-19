@@ -1,6 +1,6 @@
 import Ropita from "../../components/templates/Ropita";
 import { useState, useEffect } from "react";
-import { CreateDialog } from "./createDialog";
+import { CreateDialog } from "./CreateDialog";
 import { getUsersApi } from "../../services/api/auth";
 import EditDialog from "../../components/templates/EditDialog"; // Importa el nuevo template
 
@@ -8,22 +8,22 @@ const HistSalas = () => {
   const HistSalas = () => {
     const [openEdit, setOpenEdit] = useState(false); // Controla el diálogo de edición
     const [salaSeleccionada, setSalaSeleccionada] = useState(null); // Sala actual a editar
-  
+
     // Función para abrir el diálogo con la sala seleccionada
     const abrirEditarSala = (sala) => {
       setSalaSeleccionada(sala);
       setOpenEdit(true);
     };
-  
+
     // Función para actualizar la sala
     const actualizarSala = (salaEditada) => {
       setSalas((prevSalas) =>
         prevSalas.map((sala) =>
-          sala.id === salaEditada.id ? salaEditada : sala
-        )
+          sala.id === salaEditada.id ? salaEditada : sala,
+        ),
       );
     };
-  
+
     return (
       <>
         <table>
@@ -39,7 +39,7 @@ const HistSalas = () => {
             ))}
           </tbody>
         </table>
-  
+
         <EditDialog
           open={openEdit}
           closeDialog={() => setOpenEdit(false)}
@@ -105,7 +105,11 @@ const HistSalas = () => {
         </tbody>
       </table>
 
-      <CreateDialog open={open} closeDialog={Cdialog} agregarSala={agregarSala} />
+      <CreateDialog
+        open={open}
+        closeDialog={Cdialog}
+        agregarSala={agregarSala}
+      />
     </Ropita>
   );
 };
