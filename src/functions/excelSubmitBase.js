@@ -1,10 +1,10 @@
 import * as XLSX from "xlsx";
 import { createClient } from "@supabase/supabase-js";
+import { config } from "../config";
 
 // Inicializa el cliente de Supabase
-const supabaseUrl = "";
-const supabaseKey = "";
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+console.log(config.supabaseUrl);
 
 // Función para formatear las fechas en formato 'YYYY-MM-DD'
 const formatDate = (dateString) => {
