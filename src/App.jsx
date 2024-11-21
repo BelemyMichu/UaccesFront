@@ -3,6 +3,7 @@ import HistSalas from "./pages/HistSalas";
 import LectorExcel from "./pages/LectorExcel";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
+import Asistencias from "./pages/Asistencias";
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
 
         {/*secretario*/}
         <Route path="/programacion-academica" element={<LectorExcel />} />
-        {/* <Route path="/asistencia" element={<Asistencia />} />
-        <Route path="/gestion-usuarios" element={<Users />} /> */}
+        <Route path="/asistencias" element={<Asistencias />} />
+        {/* <Route path="/gestion-usuarios" element={<Users />} /> */}
       </Routes>
     </Router>
   );
