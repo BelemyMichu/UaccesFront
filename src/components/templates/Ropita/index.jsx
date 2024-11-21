@@ -42,13 +42,13 @@ const Ropita = ({ children, title = "", className = "" }) => {
     }
   }, []);
   return (
-    <div className={`flex flex-col  min-h-screen bg-light-purple ${className}`}>
+    <div className={`flex flex-col min-h-screen bg-light-purple ${className}`}>
       <header className="w-full text-black">
-        <nav className="h-[80px] flex justify-between items-center p-4 bg-purple-white">
+        <nav className="h-[80px] w-full flex justify-between items-center p-4 bg-purple-white">
           <div>
             <img
               className="w-[100%] h-[50px] object-containt"
-              src="/public/UNAB_horizontal.png"
+              src="/UNAB_horizontal.png"
               alt="Logo UNAB"
             />
           </div>
@@ -120,7 +120,7 @@ const Ropita = ({ children, title = "", className = "" }) => {
         <h1 className="text-2xl font-normal text-left ml-2 mt-2">{title}</h1>
       </header>
 
-      <main className="p-6">
+      <main className="p-6 sm:max-lg:p-0">
         <div className="w-auto h-auto max-w-full mx-auto p-4">{children}</div>
       </main>
 

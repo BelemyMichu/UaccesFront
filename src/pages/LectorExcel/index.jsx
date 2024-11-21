@@ -98,8 +98,8 @@ function LectorExcel() {
   return (
     <Ropita title="Programación académica">
       <div className="flex flex-col items-center justify-center">
-        <div className="text-center rounded-lg w-full p-4 flex justify-between">
-          <div className="flex gap-4">
+        <div className="text-center rounded-lg w-full p-2 flex justify-between sm:max-lg:flex-col">
+          <div className="flex gap-4 sm:max-lg:flex-col">
             <button
               onClick={() => setShowFileUpload(!showFileUpload)}
               className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
@@ -117,7 +117,7 @@ function LectorExcel() {
             placeholder="Buscar..."
             value={searchTerm}
             onChange={handleSearch}
-            className="border border-gray-300 rounded-lg p-2 w-[300px]"
+            className="border border-gray-300 rounded-lg p-2 w-[300px] sm:max-lg:w-full sm:max-lg:mt-4"
           />
         </div>
         {showFileUpload && (
@@ -164,8 +164,8 @@ function LectorExcel() {
           </div>
         )} */}
         {excelData.length > 0 ? (
-          <div>
-            <table className="bg-purple-white text-center rounded-lg">
+          <div className="overflow-x-auto w-full rounded-lg">
+            <table className="min-w-full bg-purple-white text-center rounded-lg">
               <thead>
                 <tr>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
