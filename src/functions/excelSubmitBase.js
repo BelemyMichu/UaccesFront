@@ -55,7 +55,7 @@ export const leerExcelYSubir = async (file) => {
     // Inserta los datos en Supabase
     try {
       const { data: supabaseData, error } = await supabase
-        .from("excelprueba") // Nombre de la tabla
+        .from("programacion_academica") // Nombre de la tabla
         .insert(dataToInsert);
 
       if (error) {
