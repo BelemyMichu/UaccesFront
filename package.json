@@ -9,9 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/material": "^6.1.8",
     "@supabase/supabase-js": "^2.46.1",
     "@tailwindcss/forms": "^0.5.9",
     "axios": "^1.7.7",
+    "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.441.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

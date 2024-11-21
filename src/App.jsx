@@ -9,13 +9,17 @@ function App() {
     
     <Router>
       <Routes>
-        {/*<Route path="/" element={< />} />*/}
-        
-        <Route path="/histSalas" element={<HistSalas />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        
+        {/*Admin de salas*/}
+        <Route path="/histSalas" element={<HistSalas />} />
+        {/* <Route path="/reportes" element={<Reportes />} /> */}
 
-        <Route path="/lectorExcel" element={<LectorExcel />} />
+        {/*secretario*/}
+        <Route path="/programacion-academica" element={<LectorExcel />} />
+        {/* <Route path="/asistencia" element={<Asistencia />} />
+        <Route path="/gestion-usuarios" element={<Users />} /> */}
       </Routes>
     </Router>
   );
