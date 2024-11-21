@@ -29,7 +29,7 @@ function LoginPage() {
           nombre: res.data.nombre
         });
         if (res.data.rol === "Secretario") {
-          navigate("/lectorExcel");
+          navigate("/programacion-academica");
         } else if (res.data.rol === "Admin") {
           navigate("/histSalas");
         }

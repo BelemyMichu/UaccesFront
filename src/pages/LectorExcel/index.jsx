@@ -3,6 +3,9 @@ import { useState } from "react";
 import { leerExcelYSubir } from "../../functions/excelSubmitBase";
 import * as XLSX from "xlsx";
 
+import Ropita from "../../components/templates/Ropita";
+
+
 function LectorExcel() {
   const [excelData, setExcelData] = useState([]);
 
@@ -25,23 +28,25 @@ function LectorExcel() {
   };
 
   return (
-    <div className="container">
-      <h1>Prueba de Lectura y Subida de Excel</h1>
-      <span className="text">Selecciona un archivo</span>
-      <input type="file" name="file" id="file" onChange={handleFileUpload} />
+    <Ropita title="Programación academica">
+      <div className="container">
+        <h1>Prueba de Lectura y Subida de Excel</h1>
+        <span className="text">Selecciona un archivo</span>
+        <input type="file" name="file" id="file" onChange={handleFileUpload} />
 
-      {/* Mostrar los datos leídos del archivo Excel */}
-      {excelData.length > 0 && (
-        <div>
-          <h2>Datos del archivo Excel:</h2>
-          <ul>
-            {excelData.map((row, index) => (
-              <li key={index}>{JSON.stringify(row)}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+        {/* Mostrar los datos leídos del archivo Excel */}
+        {excelData.length > 0 && (
+          <div>
+            <h2>Datos del archivo Excel:</h2>
+            <ul>
+              {excelData.map((row, index) => (
+                <li key={index}>{JSON.stringify(row)}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </Ropita>
   );
 }
 
