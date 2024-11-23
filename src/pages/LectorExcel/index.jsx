@@ -22,7 +22,6 @@ function LectorExcel() {
   const [deleteData, setDeleteData] = useState({});
 
   const [showCreate, setShowCreate] = useState(false);
-  const [createData, setCreateData] = useState({});
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);

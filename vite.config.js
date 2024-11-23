@@ -9,5 +9,5 @@ export default defineConfig({
     alias: {
       "@": "/src", // Esto permite usar '@' como alias para 'src'
     },
-  },
+  }
 });

@@ -28,9 +28,9 @@ function LoginPage() {
           rol: res.data.rol,
           nombre: res.data.nombre
         });
-        if (res.data.rol === "Secretario") {
+        if (res.data.rol === "Secretaría") {
           navigate("/programacion-academica");
-        } else if (res.data.rol === "Admin") {
+        } else if (res.data.rol === "Admin Sala") {
           navigate("/histSalas");
         }
       }
@@ -63,7 +63,7 @@ function LoginPage() {
   useEffect(() => {
     const user = getLocalStorage("user");
     if (user) {
-      user.rol === "Secretario" ? navigate("/programacion-academica") : navigate("/histSalas");
+      user.rol === "Secretaría" ? navigate("/programacion-academica") : user.rol === "Admin Sala" ? navigate("/histSalas") : navigate("/gestion-usuarios");
     }
   }, []);
   return (

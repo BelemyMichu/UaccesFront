@@ -53,9 +53,9 @@ const Ropita = ({ children, title = "", className = "" }) => {
             />
           </div>
           <div className="flex space-x-4 items-center">
-            {user && user.rol === "Secretario" && (
+            {user && user.rol === "Secretaría" && (
               <ul className="flex space-x-4">
-                <li>Gestión de usuarios</li>
+                <li><Link to={"/gestion-usuarios"}>Gestión de usuarios </Link></li>
                 <li>
                   {" "}
                   <Link to={"/asistencias"}>
@@ -70,7 +70,7 @@ const Ropita = ({ children, title = "", className = "" }) => {
               </ul>
             )}
 
-            {user && user.rol !== "Secretario" && (
+            {user && user.rol !== "Secretaría" && (
               <ul className="flex space-x-4">
                 <li>Gestión de salas</li>
                 <li>Reportes</li>
