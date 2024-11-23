@@ -4,7 +4,7 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 
 import { loginAPI } from "../../services/api/auth";
-import { setLocalStorage } from "../../functions/LocalStorage";
+import { setLocalStorage, getLocalStorage } from "../../functions/LocalStorage";
 
 function LoginPage() {
   const [selectedBtn, setSelectedBtn] = useState("");
@@ -28,9 +28,9 @@ function LoginPage() {
           rol: res.data.rol,
           nombre: res.data.nombre
         });
-        if (res.data.rol === "Secretario") {
+        if (res.data.rol === "Secretaría") {
           navigate("/programacion-academica");
-        } else if (res.data.rol === "Admin") {
+        } else if (res.data.rol === "Admin Sala") {
           navigate("/histSalas");
         }
       }
@@ -59,6 +59,13 @@ function LoginPage() {
       scanner.render(success, error);
     }
   }, [selectedBtn]);
+
+  useEffect(() => {
+    const user = getLocalStorage("user");
+    if (user) {
+      user.rol === "Secretaría" ? navigate("/programacion-academica") : user.rol === "Admin Sala" ? navigate("/histSalas") : navigate("/gestion-usuarios");
+    }
+  }, []);
   return (
     <AuthTemplate>
       <div className="flex items-center justify-center h-screen bg-purple-200">

@@ -18,7 +18,7 @@ const formatDate = (dateString) => {
   return date.toISOString().split("T")[0]; // Formato 'YYYY-MM-DD'
 };
 
-export const leerExcelYSubir = async (file) => {
+export const leerExcelYSubir = async (file, type = "programacion_academica") => {
   const reader = new FileReader();
 
   reader.onload = async (event) => {
@@ -42,7 +42,7 @@ export const leerExcelYSubir = async (file) => {
           row[index] !== undefined ? row[index].toString().trim() : null;
 
         // Si el valor es una fecha, lo formatea
-        if (header.toLowerCase().includes("fecha") && value) {
+        if (header.toLowerCase().includes("fecha") && value && type !== "user") {
           value = formatDate(value);
         }
 
@@ -54,7 +54,7 @@ export const leerExcelYSubir = async (file) => {
     // Inserta los datos en Supabase
     try {
       const { data: supabaseData, error } = await supabase
-        .from("programacion_academica") // Nombre de la tabla
+        .from(type === "user" ? "usuarios" : "programacion_academica") // Nombre de la tabla
         .insert(dataToInsert);
 
       if (error) {

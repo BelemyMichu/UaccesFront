@@ -38,7 +38,7 @@ export const editAcademic = async (formData) => {
       {}
     );
     const { id, ...updateData } = dataToUpdate;
-    console.log(updateData)
+    console.log(updateData);
     const { data, error } = await supabase
       .from("programacion_academica")
       .update(updateData)

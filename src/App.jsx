@@ -4,6 +4,7 @@ import LectorExcel from "./pages/LectorExcel";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import Asistencias from "./pages/Asistencias";
+import GestionUsuario from "./pages/GestionUsuario";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
         {/*secretario*/}
         <Route path="/programacion-academica" element={<LectorExcel />} />
         <Route path="/asistencias" element={<Asistencias />} />
-        {/* <Route path="/gestion-usuarios" element={<Users />} /> */}
+        <Route path="/gestion-usuarios" element={<GestionUsuario />} />
       </Routes>
     </Router>
   );
