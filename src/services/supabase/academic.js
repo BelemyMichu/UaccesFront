@@ -67,8 +67,34 @@ export const addAcademic = async (formData) => {
       console.error("Error al insertar datos:", error.message);
     } else {
       console.log("Datos insertados correctamente:", data);
+      return data;
     }
   } catch (err) {
     console.error("Error en la operación:", err.message);
   }
 };
+
+export const AddAcademicByQR = async (rut, nombre, sala, sede, fecha, horario) => {
+  try {
+    const { data, error } = await supabase
+      .from("programacion_academica")
+      .insert({
+        "RUT Profesor": rut,
+        "Nombre Profesor": nombre,
+        Sala: sala,
+        Edificio: sede,
+        fecha: fecha,
+        Horario: horario,
+        estado: true
+      });
+
+    if (error) {
+      console.error("Error al insertar datos:", error.message);
+    } else {
+      console.log("Datos insertados correctamente:", data);
+      return data;
+    }
+  } catch (err) {
+    console.error("Error en la operación:", err.message);
+  }
+}

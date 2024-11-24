@@ -41,8 +41,8 @@ const Asistencias = () => {
     if (actualDay < diasSemana.length - 1) {
       const nuevoDia = actualDay + 1;
       const diaSig = diasSemana[nuevoDia];
-      const cursosSig = excelData.filter((curso) =>
-        curso.Horario.includes(diaSig)
+      const cursosSig = excelData.filter(
+        (curso) => curso.Horario && curso.Horario.includes(diaSig)
       );
       setTodayCourses(cursosSig);
       setActualDay(nuevoDia);
@@ -66,8 +66,8 @@ const Asistencias = () => {
     if (actualDay > 0) {
       const nuevoDia = actualDay - 1;
       const diaPrev = diasSemana[nuevoDia];
-      const cursosPrev = excelData.filter((curso) =>
-        curso.Horario.includes(diaPrev)
+      const cursosPrev = excelData.filter(
+        (curso) => curso.Horario && curso.Horario.includes(diaPrev)
       );
       setTodayCourses(cursosPrev);
       setActualDay(nuevoDia);
@@ -89,14 +89,18 @@ const Asistencias = () => {
   const getData = async () => {
     try {
       const res = await getProgramacionAcademica();
+      console.log(res);
       setExcelData(res);
+
       const hoy = new Date();
       const diaActual = diasSemana[hoy.getDay()];
-      // Filtrar cursos que coincidan con el día actual
-      const cursosHoy = res.filter((curso) =>
-        curso.Horario.includes(diaActual)
+
+      // Filtrar cursos que coincidan con el día actual (con validación)
+      const cursosHoy = res.filter(
+        (curso) => curso.Horario && curso.Horario.includes(diaActual)
       );
-      setTodayCourses(cursosHoy); // Establecer los cursos del día
+
+      setTodayCourses(cursosHoy);
       setActualDay(hoy.getDay());
     } catch (error) {
       console.error("Error al obtener datos de programación académica:", error);
@@ -167,7 +171,7 @@ const Asistencias = () => {
                     Clase
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Nombre profesor
+                    Nombre
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
                     Horario
@@ -182,13 +186,13 @@ const Asistencias = () => {
                   (row, index) => (
                     <tr key={index}>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row["Nombre Asignatura"]}
+                        {row["Nombre Asignatura"] || "No asignada"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row["Nombre Profesor"]}
+                        {row["Nombre Profesor"] || "No asignado"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row.Horario}
+                        {row.Horario || row.fecha}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                         {row.estado === false ? (

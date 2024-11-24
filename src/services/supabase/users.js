@@ -51,3 +51,16 @@ export const addUser = async (formData) => {
     console.error("Error en la operación:", err.message);
   }
 };
+
+export const getUserByRUTAPI = async (rut) => {
+  try {
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("rut", rut);
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error al obtener datos de usuarios:", error);
+  }
+};
