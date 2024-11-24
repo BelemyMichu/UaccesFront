@@ -16,6 +16,17 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  const extractRUT = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      const run = parsedUrl.searchParams.get("RUN");
+      return run;
+    } catch (error) {
+      console.error("Error al analizar la URL:", error);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,7 +37,7 @@ function LoginPage() {
           rut: res.data.rut,
           correo: res.data.correo,
           rol: res.data.rol,
-          nombre: res.data.nombre
+          nombre: res.data.nombre,
         });
         if (res.data.rol === "Secretaría") {
           navigate("/programacion-academica");
@@ -35,7 +46,7 @@ function LoginPage() {
         }
       }
     } catch (error) {
-      console.log(error.data)
+      console.log(error.data);
       alert("Inicio de sesión fallido");
     }
   };
@@ -43,7 +54,9 @@ function LoginPage() {
   useEffect(() => {
     if (selectedBtn === "qrButton" && document.getElementById("reader")) {
       const success = (result) => {
-        setQrResult(result);
+        const run = extractRUT(result);
+        console.log("RUN escaneado:", run);
+        setQrResult(run); // Mantén el URL completo si lo necesitas
         scanner.clear();
       };
 
@@ -63,7 +76,11 @@ function LoginPage() {
   useEffect(() => {
     const user = getLocalStorage("user");
     if (user) {
-      user.rol === "Secretaría" ? navigate("/programacion-academica") : user.rol === "Admin Sala" ? navigate("/histSalas") : navigate("/gestion-usuarios");
+      user.rol === "Secretaría"
+        ? navigate("/programacion-academica")
+        : user.rol === "Admin Sala"
+        ? navigate("/histSalas")
+        : navigate("/gestion-usuarios");
     }
   }, []);
   return (
