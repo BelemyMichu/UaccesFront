@@ -4,7 +4,9 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 
 import { loginAPI } from "../../services/api/auth";
-import { setLocalStorage, getLocalStorage } from "../../functions/LocalStorage";
+import { setLocalStorage, getLocalStorage } from "../../functions/localStorage";
+
+import { Userqr } from "../../components/Userqr";
 
 function LoginPage() {
   const [selectedBtn, setSelectedBtn] = useState("");
@@ -16,6 +18,17 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  const extractRUT = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      const run = parsedUrl.searchParams.get("RUN");
+      return run;
+    } catch (error) {
+      console.error("Error al analizar la URL:", error);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,7 +39,7 @@ function LoginPage() {
           rut: res.data.rut,
           correo: res.data.correo,
           rol: res.data.rol,
-          nombre: res.data.nombre
+          nombre: res.data.nombre,
         });
         if (res.data.rol === "Secretaría") {
           navigate("/programacion-academica");
@@ -35,7 +48,7 @@ function LoginPage() {
         }
       }
     } catch (error) {
-      console.log(error.data)
+      console.log(error.data);
       alert("Inicio de sesión fallido");
     }
   };
@@ -43,7 +56,11 @@ function LoginPage() {
   useEffect(() => {
     if (selectedBtn === "qrButton" && document.getElementById("reader")) {
       const success = (result) => {
-        setQrResult(result);
+        const run = extractRUT(
+          "https://portal.sidiv.registrocivil.cl/docstatus?RUN=20673832-4&type=CEDULA&serial=526206509&mrz=526206509101052593105250"
+        );
+        console.log("RUN escaneado:", run);
+        setQrResult(run); // Mantén el URL completo si lo necesitas
         scanner.clear();
       };
 
@@ -57,13 +74,22 @@ function LoginPage() {
         true
       );
       scanner.render(success, error);
+    // } else {
+    //   const run = extractRUT(
+    //     "https://portal.sidiv.registrocivil.cl/docstat..."
+    //   );
+    //   setQrResult(run);
     }
   }, [selectedBtn]);
 
   useEffect(() => {
     const user = getLocalStorage("user");
     if (user) {
-      user.rol === "Secretaría" ? navigate("/programacion-academica") : user.rol === "Admin Sala" ? navigate("/histSalas") : navigate("/gestion-usuarios");
+      user.rol === "Secretaría"
+        ? navigate("/programacion-academica")
+        : user.rol === "Admin Sala"
+        ? navigate("/histSalas")
+        : navigate("/gestion-usuarios");
     }
   }, []);
   return (
@@ -160,7 +186,7 @@ function LoginPage() {
                 </h2>
                 <div>
                   {qrResult ? (
-                    <a href={qrResult}>Ir a sitio</a>
+                    <Userqr rut={qrResult} sala={sala} sede={edificio} setRut={setQrResult} />
                   ) : (
                     <div id="reader"></div>
                   )}

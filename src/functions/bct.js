@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 
-
 // Función para encriptar un password.
 export const hashPassword = (password) => {
   return bcrypt.hashSync(password, 10);

@@ -14,9 +14,7 @@ const DeleteDialog = ({ data, closeDialog }) => {
   return (
     <Dialog>
       <div className="flex flex-col items-center justify-around h-full">
-        <h2 className="text-xl font-semibold">
-          Eliminar usuario
-        </h2>
+        <h2 className="text-xl font-semibold">Eliminar usuario</h2>
         <div>
           <span className="font-semibold text-xl">
             ¿Estás seguro de que quieres eliminar a este usuario?
@@ -27,14 +25,16 @@ const DeleteDialog = ({ data, closeDialog }) => {
             <span className="text-md">Nombre: {data.nombre}</span>
             <span className="text-md">RUT: {data.rut}</span>
             <span className="text-md">Rol: {data.rol}</span>
-            <span className="text-md">Correo: {data.correo || "No posee correo"}</span>
+            <span className="text-md">
+              Correo: {data.correo || "No posee correo"}
+            </span>
           </div>
-
         </div>
         <div className="flex justify-center gap-10">
           <button
             onClick={handleDelete}
-            className="bg-red-700 text-white px-4 py-2 font-semibold rounded-xl hover:bg-red-800 transition-colors w-[150px]">
+            className="bg-red-700 text-white px-4 py-2 font-semibold rounded-xl hover:bg-red-800 transition-colors w-[150px]"
+          >
             Si, eliminar
           </button>
           <button
