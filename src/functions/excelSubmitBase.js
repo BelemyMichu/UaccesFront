@@ -18,7 +18,20 @@ const formatDate = (dateString) => {
   return date.toISOString().split("T")[0]; // Formato 'YYYY-MM-DD'
 };
 
-export const leerExcelYSubir = async (file, type = "programacion_academica") => {
+function decimalToTime(decimal) {
+  const totalSeconds = decimal * 24 * 60 * 60; // convertir días decimales a segundos
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
+export const leerExcelYSubir = async (
+  file,
+  type = "programacion_academica"
+) => {
   const reader = new FileReader();
 
   reader.onload = async (event) => {
@@ -27,12 +40,23 @@ export const leerExcelYSubir = async (file, type = "programacion_academica") => 
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
 
-    // Convierte la hoja a JSON
+    // Convierte la hoja a JSON (filas como arreglos)
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-    // Filtra los encabezados y los datos
-    const headers = jsonData[0]; // Asumiendo que la primera fila son los encabezados
-    const rows = jsonData.slice(1); // Toma todas las filas menos la primera
+    // Asegúrate de separar encabezados y datos correctamente
+    const headers = jsonData[0]; // Primera fila como encabezados
+    const rows = jsonData.slice(1); // Resto de filas como datos
+
+    // Función para convertir decimal a formato HH:MM:SS
+    const decimalToTime = (decimal) => {
+      const totalSeconds = Math.round(decimal * 24 * 3600);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    };
 
     // Prepara los datos para subir a Supabase
     const dataToInsert = rows.map((row) => {
@@ -41,8 +65,21 @@ export const leerExcelYSubir = async (file, type = "programacion_academica") => 
         let value =
           row[index] !== undefined ? row[index].toString().trim() : null;
 
-        // Si el valor es una fecha, lo formatea
-        if (header.toLowerCase().includes("fecha") && value && type !== "user") {
+        // Si el encabezado sugiere que es un tiempo, convierte el valor decimal
+        if (
+          header.toLowerCase().includes("hora") && // Detecta columnas de tiempo
+          value &&
+          !isNaN(value) // Verifica si es un número
+        ) {
+          value = decimalToTime(parseFloat(value)); // Convierte el valor decimal a HH:MM:SS
+        }
+
+        // Si el valor es una fecha, lo formatea (si aplica)
+        if (
+          header.toLowerCase().includes("fecha") &&
+          value &&
+          type !== "user"
+        ) {
           value = formatDate(value);
         }
 

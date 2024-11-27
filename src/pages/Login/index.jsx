@@ -76,7 +76,7 @@ function LoginPage() {
       scanner.render(success, error);
     // } else {
     //   const run = extractRUT(
-    //     "https://portal.sidiv.registrocivil.cl/docstat..."
+    //     "https://portal.sidiv.registrocivil.cl/docstatus?RUN=..."
     //   );
     //   setQrResult(run);
     }

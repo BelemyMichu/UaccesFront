@@ -17,7 +17,7 @@ function LectorExcel() {
 
   const [showEdit, setShowEdit] = useState(false);
   const [editData, setEditData] = useState({});
-  
+
   const [showDelete, setShowDelete] = useState(false);
   const [deleteData, setDeleteData] = useState({});
 
@@ -48,6 +48,19 @@ function LectorExcel() {
     }
   };
 
+  const convertirTiempo = (valor) => {
+    if (!valor || isNaN(valor)) return null; // Maneja valores vacíos o inválidos
+    const totalSegundos = Math.round(valor * 24 * 60 * 60);
+    const horas = Math.floor(totalSegundos / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutos = Math.floor((totalSegundos % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const segundos = (totalSegundos % 60).toString().padStart(2, "0");
+    return `${horas}:${minutos}:${segundos}`;
+  };
+
   const handleFileUpload = () => {
     if (file) {
       leerExcelYSubir(file);
@@ -58,8 +71,14 @@ function LectorExcel() {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        console.log(jsonData);
-        setExcelData(jsonData);
+        const processedData = jsonData.map((row) => ({
+          ...row,
+          "Hora Inicio": convertirTiempo(row["Hora Inicio"]), // Asegúrate de usar el nombre exacto de la columna
+          "Hora Fin": convertirTiempo(row["Hora Fin"]), // Asegúrate de usar el nombre exacto de la columna
+        }));
+
+        //console.log(processedData);
+        setExcelData(processedData);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -107,7 +126,8 @@ function LectorExcel() {
             </button>
             <button
               onClick={() => setShowCreate(!showCreate)}
-              className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors">
+              className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+            >
               Agregar un nuevo horario
             </button>
           </div>
@@ -266,7 +286,7 @@ function LectorExcel() {
                       {row["Modalidad"]}
                     </td>
                     <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                      {row["Horario"]}
+                      {`${row["Día"]} ${row["Hora Inicio"]} - ${row["Hora Fin"]}`}
                     </td>
                     <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       {row["Edificio"]}
@@ -314,9 +334,7 @@ function LectorExcel() {
       {showDelete && (
         <DeleteDialog data={deleteData} closeDialog={setShowDelete} />
       )}
-      {showCreate&& (
-        <CreateDialog  closeDialog={setShowCreate} />
-      )}
+      {showCreate && <CreateDialog closeDialog={setShowCreate} />}
     </Ropita>
   );
 }

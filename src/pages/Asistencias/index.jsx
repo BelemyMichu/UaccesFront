@@ -42,7 +42,7 @@ const Asistencias = () => {
       const nuevoDia = actualDay + 1;
       const diaSig = diasSemana[nuevoDia];
       const cursosSig = excelData.filter(
-        (curso) => curso.Horario && curso.Horario.includes(diaSig)
+        (curso) => curso["Día"] && curso["Día"].includes(diaSig)
       );
       setTodayCourses(cursosSig);
       setActualDay(nuevoDia);
@@ -67,7 +67,7 @@ const Asistencias = () => {
       const nuevoDia = actualDay - 1;
       const diaPrev = diasSemana[nuevoDia];
       const cursosPrev = excelData.filter(
-        (curso) => curso.Horario && curso.Horario.includes(diaPrev)
+        (curso) => curso["Día"] && curso["Día"].includes(diaPrev)
       );
       setTodayCourses(cursosPrev);
       setActualDay(nuevoDia);
@@ -97,7 +97,7 @@ const Asistencias = () => {
 
       // Filtrar cursos que coincidan con el día actual (con validación)
       const cursosHoy = res.filter(
-        (curso) => curso.Horario && curso.Horario.includes(diaActual)
+        (curso) => curso["Día"] && curso["Día"].includes(diaActual)
       );
 
       setTodayCourses(cursosHoy);
@@ -177,6 +177,12 @@ const Asistencias = () => {
                     Horario
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
+                    Edificio
+                  </th>
+                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
+                    Sala
+                  </th>
+                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
                     Estado
                   </th>
                 </tr>
@@ -193,6 +199,12 @@ const Asistencias = () => {
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                         {row.Horario || row.fecha}
+                      </td>
+                      <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                        {row.Edificio}
+                      </td>
+                      <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                        {row.Sala}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                         {row.estado === false ? (
