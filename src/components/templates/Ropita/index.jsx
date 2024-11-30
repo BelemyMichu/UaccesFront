@@ -72,8 +72,9 @@ const Ropita = ({ children, title = "", className = "" }) => {
 
             {user && user.rol !== "Secretaría" && (
               <ul className="flex space-x-4">
-                <li>Gestión de salas</li>
-                <li>Reportes</li>
+                <Link to="/Reportes">Reportes</Link>
+                <Link to="/GestSalas">Gestión de salas</Link>
+                <Link to="/histSalas">Historial de salas</Link>
               </ul>
             )}
             <span> | </span>

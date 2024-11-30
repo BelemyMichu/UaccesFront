@@ -5,6 +5,7 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import Asistencias from "./pages/Asistencias";
 import GestionUsuario from "./pages/GestionUsuario";
+import Reportes from "./pages/Reportes";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path="/programacion-academica" element={<LectorExcel />} />
         <Route path="/asistencias" element={<Asistencias />} />
         <Route path="/gestion-usuarios" element={<GestionUsuario />} />
+        <Route path="/Reportes" element={<Reportes />} />
+
       </Routes>
     </Router>
   );

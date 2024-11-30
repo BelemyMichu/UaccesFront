@@ -2,6 +2,7 @@ import Ropita from "../../components/templates/Ropita";
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { config } from "../../config";
+import { Link } from "react-router-dom";
 
 const HistSalas = () => {
   const [salas, setSalas] = useState([]);
