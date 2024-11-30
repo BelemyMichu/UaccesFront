@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   getLocalStorage,
   removeLocalStorage,
-} from "../../../functions/LocalStorage";
+} from "../../../functions/localStorage.js";
 import { useNavigate, Link } from "react-router-dom";
 import userIcon from "../../../assets/user-icon.svg";
 
@@ -55,12 +55,12 @@ const Ropita = ({ children, title = "", className = "" }) => {
           <div className="flex space-x-4 items-center">
             {user && user.rol === "Secretaría" && (
               <ul className="flex space-x-4">
-                <li><Link to={"/gestion-usuarios"}>Gestión de usuarios </Link></li>
+                <li>
+                  <Link to={"/gestion-usuarios"}>Gestión de usuarios </Link>
+                </li>
                 <li>
                   {" "}
-                  <Link to={"/asistencias"}>
-                    Asistencias
-                  </Link>
+                  <Link to={"/asistencias"}>Asistencias</Link>
                 </li>
                 <li>
                   <Link to={"/programacion-academica"}>
