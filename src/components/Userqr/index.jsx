@@ -50,7 +50,8 @@ const Userqr = ({ rut, sala, sede }) => {
           sala: sala,
           dia: resAcad[0].Día,
           hora_inicio: resAcad[0]["Hora Inicio"],
-          hora_final: resAcad[0]["Hora Fin"]
+          hora_final: resAcad[0]["Hora Fin"],
+          presente: true
         })
       } else {
         const horario = formatFecha();
@@ -66,7 +67,8 @@ const Userqr = ({ rut, sala, sede }) => {
             sala: sala,
             dia: horario.diaSemana,
             hora_inicio: horario.hora,
-            hora_final: null
+            hora_final: null,
+            presente: true
           }
         );
         console.log(resp);
