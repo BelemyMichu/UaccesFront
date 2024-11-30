@@ -13,7 +13,7 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [qrResult, setQrResult] = useState();
-  const [sala, setSala] = useState(301);
+  const [sala, setSala] = useState("301");
   const [edificio, setEdificio] = useState("A2");
 
   const navigate = useNavigate();
@@ -56,9 +56,7 @@ function LoginPage() {
   useEffect(() => {
     if (selectedBtn === "qrButton" && document.getElementById("reader")) {
       const success = (result) => {
-        const run = extractRUT(
-          "https://portal.sidiv.registrocivil.cl/docstatus?RUN=20673832-4&type=CEDULA&serial=526206509&mrz=526206509101052593105250"
-        );
+        const run = extractRUT(result);
         console.log("RUN escaneado:", run);
         setQrResult(run); // Mantén el URL completo si lo necesitas
         scanner.clear();
@@ -186,7 +184,12 @@ function LoginPage() {
                 </h2>
                 <div>
                   {qrResult ? (
-                    <Userqr rut={qrResult} sala={sala} sede={edificio} setRut={setQrResult} />
+                    <Userqr
+                      rut={qrResult}
+                      sala={sala}
+                      sede={edificio}
+                      setRut={setQrResult}
+                    />
                   ) : (
                     <div id="reader"></div>
                   )}

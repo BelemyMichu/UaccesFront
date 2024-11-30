@@ -1,6 +1,7 @@
 import { useState, useEffect, act } from "react";
 import Ropita from "../../components/templates/Ropita";
-import { getProgramacionAcademica } from "../../services/supabase/academic";
+import { getTodayProfes } from "../../services/supabase/academic";
+import { createAsistencia, getAsistencias } from "../../services/supabase/asistencia";
 
 const Asistencias = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,6 +11,33 @@ const Asistencias = () => {
   const [date, setDate] = useState(new Date().toLocaleDateString("es-cl"));
   const [actualDay, setActualDay] = useState();
   const diasSemana = ["Dom", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"];
+
+  const getAusentes = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await getTodayProfes(diasSemana[new Date().getDay()]);
+      console.log(new Date())
+      if (res.length > 0) {
+        const updatedRes = res.map((profe)=> {
+          return {
+            rut: profe["RUT Profesor"],
+            nombre: profe["Nombre Profesor"],
+            rol: "Profesor",
+            asignatura: profe["Nombre Asignatura"],
+            nrc: profe["NRC"],
+            sala: profe["Sala"],
+            sede: profe["Edificio"],
+            dia: profe["Día"],
+            presente: false
+          }
+        })
+        const resAsist = await createAsistencia(updatedRes)
+        console.log(resAsist)
+      }
+    } catch (error) {
+      console.error("Error al obtener asistencias:", error);
+    }
+  };
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -28,9 +56,7 @@ const Asistencias = () => {
       setTeacherFilter([]); // Si no hay búsqueda, limpia el filtro
     } else {
       const profesorFiltrado = todayCourses.filter((curso) =>
-        curso["Nombre Profesor"]
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+        curso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setTeacherFilter(profesorFiltrado);
     }
@@ -42,7 +68,7 @@ const Asistencias = () => {
       const nuevoDia = actualDay + 1;
       const diaSig = diasSemana[nuevoDia];
       const cursosSig = excelData.filter(
-        (curso) => curso["Día"] && curso["Día"].includes(diaSig)
+        (curso) => curso.dia && curso.dia.includes(diaSig)
       );
       setTodayCourses(cursosSig);
       setActualDay(nuevoDia);
@@ -50,9 +76,7 @@ const Asistencias = () => {
       // Aplicar filtro de profesor si hay búsqueda activa
       if (searchTerm.trim() !== "") {
         const profesorFiltrado = cursosSig.filter((curso) =>
-          curso["Nombre Profesor"]
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
+          curso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setTeacherFilter(profesorFiltrado);
       } else {
@@ -67,7 +91,7 @@ const Asistencias = () => {
       const nuevoDia = actualDay - 1;
       const diaPrev = diasSemana[nuevoDia];
       const cursosPrev = excelData.filter(
-        (curso) => curso["Día"] && curso["Día"].includes(diaPrev)
+        (curso) => curso.dia && curso.dia.includes(diaPrev)
       );
       setTodayCourses(cursosPrev);
       setActualDay(nuevoDia);
@@ -75,9 +99,7 @@ const Asistencias = () => {
       // Aplicar filtro de profesor si hay búsqueda activa
       if (searchTerm.trim() !== "") {
         const profesorFiltrado = cursosPrev.filter((curso) =>
-          curso["Nombre Profesor"]
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
+          curso.nombre.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setTeacherFilter(profesorFiltrado);
       } else {
@@ -88,7 +110,7 @@ const Asistencias = () => {
 
   const getData = async () => {
     try {
-      const res = await getProgramacionAcademica();
+      const res = await getAsistencias();
       console.log(res);
       setExcelData(res);
 
@@ -97,7 +119,7 @@ const Asistencias = () => {
 
       // Filtrar cursos que coincidan con el día actual (con validación)
       const cursosHoy = res.filter(
-        (curso) => curso["Día"] && curso["Día"].includes(diaActual)
+        (curso) => curso.dia && curso.dia.includes(diaActual)
       );
 
       setTodayCourses(cursosHoy);
@@ -158,6 +180,12 @@ const Asistencias = () => {
                   <span>Limpiar</span>
                 </button>
               </form>
+              <button
+                onClick={getAusentes}
+                className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+              >
+                <span>Marcar ausentes</span>
+              </button>
               <span className="font-semibold">El día de hoy es: {date}</span>
             </div>
           </div>
@@ -168,22 +196,31 @@ const Asistencias = () => {
               <thead>
                 <tr>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Clase
+                    Rut
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
                     Nombre
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Horario
+                    Rol
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Edificio
+                    Clase
+                  </th>
+                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
+                    NRC
+                  </th>
+                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
+                    Edifico
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
                     Sala
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Estado
+                    Hora de ingreso
+                  </th>
+                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
+                    Asistencia
                   </th>
                 </tr>
               </thead>
@@ -192,22 +229,31 @@ const Asistencias = () => {
                   (row, index) => (
                     <tr key={index}>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row["Nombre Asignatura"] || "No asignada"}
+                        {row.rut || "No asignada"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row["Nombre Profesor"] || "No asignado"}
+                        {row.nombre || "No asignado"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row.Horario || row.fecha}
+                        {row.rol || "No asignado"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row.Edificio}
+                        {row.asignatura || "No asignada"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row.Sala}
+                        {row.nrc || "No asignado"}
                       </td>
                       <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                        {row.estado === false ? (
+                        {row.sala}
+                      </td>
+                      <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                        {row.sede}
+                      </td>
+                      <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                        {`${row.dia} - ${row.hora_inicio || "Sin hora"}`}
+                      </td>
+                      <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                        {row.presente === false ? (
                           <p>Ausente</p>
                         ) : (
                           <p>Presente</p>
