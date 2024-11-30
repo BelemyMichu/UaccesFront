@@ -17,8 +17,9 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     "Nombre Asignatura": "",
     "Tipo Actividad": "",
     Modalidad: "",
-    Horario: "",
-    Edificio: "",
+    Día: "",
+    "Hora Inicio": "",
+    "Hora Fin": "",
     Sala: "",
     "Capacidad Sala": "",
     "Fecha Inicio": "",
@@ -39,8 +40,10 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     try {
       const res = await editAcademic(formData);
       console.log(res);
+      alert("Datos actualizados correctamente")
       window.location.reload();
     } catch (error) {
+      alert("Error al actualizar los datos")
       console.log(error);
     }
   };
@@ -63,7 +66,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-2 gap-4 w-[600px]"
+        className="grid grid-cols-2 gap-4 w-[600px] h-[600px] px-4 overflow-y-scroll"
       >
         <div>
           <label className="block text-sm font-medium mb-1">Facultad</label>
@@ -204,11 +207,36 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Horario</label>
+          <label className="block text-sm font-medium mb-1">Día</label>
           <input
             type="text"
-            name="Horario"
-            value={formData.Horario}
+            name="Día"
+            value={formData["Día"]}
+            placeholder="Lu, Ma, Mi, Ju, Vi, Sa"
+            onChange={handleChange}
+            className="border rounded w-full p-2"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Hora Inicio</label>
+          <input
+            type="text"
+            name="Hora Inicio"
+            placeholder="HH:MM:SS"
+            value={formData["Hora Inicio"]}
+            onChange={handleChange}
+            className="border rounded w-full p-2"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Hora Fin</label>
+          <input
+            type="text"
+            name="Hora Fin"
+            placeholder="HH:MM:SS"
+            value={formData["Hora Fin"]}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
