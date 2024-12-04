@@ -5,9 +5,12 @@ import tailwindcss from "tailwindcss";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    historyApiFallback: true,
+  },
   resolve: {
     alias: {
       "@": "/src", // Esto permite usar '@' como alias para 'src'
     },
-  }
+  },
 });
