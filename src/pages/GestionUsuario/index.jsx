@@ -97,13 +97,13 @@ const GestionUsuario = () => {
           <div className="flex gap-4 sm:max-lg:flex-col">
             <button
               onClick={() => setShowFileUpload(!showFileUpload)}
-              className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+              className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
             >
               Nuevo excel de usuarios
             </button>
             <button
               onClick={() => setShowCreate(!showCreate)}
-              className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+              className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
             >
               Agregar un nuevo usuario
             </button>
@@ -118,9 +118,7 @@ const GestionUsuario = () => {
         </div>
         {showFileUpload && (
           <div className="flex flex-col items-center justify-center bg-purple-white rounded-xl gap-4 p-2 m-2 w-[400px]">
-            <h1 className="font-semibold text-xl">
-              Subir nuevos usuarios
-            </h1>
+            <h1 className="font-semibold text-xl">Subir nuevos usuarios</h1>
             <input
               type="file"
               name="file"
@@ -139,7 +137,7 @@ const GestionUsuario = () => {
                 <p>Archivo cargado: {fileName}</p>
                 <button
                   onClick={handleFileUpload}
-                  className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors w-[100px]"
+                  className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors w-[100px]"
                 >
                   Guardar
                 </button>
@@ -187,13 +185,13 @@ const GestionUsuario = () => {
                     <td className="p-2 border-gray-500 hover:bg-gray-200 duration-200">
                       <button
                         onClick={() => handleEdit(row)}
-                        className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors w-full mb-2"
+                        className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors w-full mb-2"
                       >
                         Editar
                       </button>
                       <button
                         onClick={() => handleDelete(row)}
-                        className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors w-full"
+                        className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors w-full"
                       >
                         Eliminar
                       </button>
@@ -215,9 +213,7 @@ const GestionUsuario = () => {
       {showDelete && (
         <DeleteDialog data={deleteData} closeDialog={setShowDelete} />
       )}
-      {showCreate && (
-        <CreateDialog closeDialog={setShowCreate} />
-      )}
+      {showCreate && <CreateDialog closeDialog={setShowCreate} />}
     </Ropita>
   );
 };

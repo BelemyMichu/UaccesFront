@@ -25,7 +25,7 @@ export default function Reportes() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ input: JSON.stringify(data) }), // Mandar como string
-        },
+        }
       );
       if (!response.ok) {
         throw new Error("Error al enviar datos al backend");
@@ -71,7 +71,7 @@ export default function Reportes() {
                 dateFormat="dd/MM/yyyy"
                 locale="es"
                 placeholderText="Seleccionar fecha"
-                className="px-4 py-2 border-2 border-purple-500 rounded-lg shadow-sm focus:ring focus:ring-indigo-300 w-[250px] bg-purple-white"
+                className="px-4 py-2 border-2 border-custom-red rounded-lg shadow-sm focus:ring focus:ring-indigo-300 w-[250px] bg-purple-white"
               />
             </div>
 
@@ -85,12 +85,12 @@ export default function Reportes() {
                 dateFormat="dd/MM/yyyy"
                 locale="es"
                 placeholderText="Seleccionar fecha"
-                className="px-4 py-2 border-2 border-purple-500 rounded-lg shadow-sm focus:ring focus:ring-indigo-300 w-[250px] bg-purple-white"
+                className="px-4 py-2 border-2 border-custom-red rounded-lg shadow-sm focus:ring focus:ring-indigo-300 w-[250px] bg-purple-white"
               />
             </div>
 
             <button
-              className="w-[200px] bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition"
+              className="w-[200px] bg-custom-red text-white py-2 rounded-lg hover:bg-custom-red-2 transition"
               onClick={cargarSalasYGenerar} // Llama a la función para cargar y enviar datos
             >
               Generar

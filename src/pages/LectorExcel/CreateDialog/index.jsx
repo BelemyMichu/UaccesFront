@@ -17,7 +17,7 @@ function CreateDialog({ closeDialog }) {
     "Nombre Asignatura": "",
     "Tipo Actividad": "",
     Modalidad: "",
-    "Día": "",
+    Día: "",
     "Hora Inicio": "",
     "Hora Fin": "",
     Sala: "",
@@ -39,12 +39,12 @@ function CreateDialog({ closeDialog }) {
     console.log("Datos del formulario:", formData);
     try {
       const res = await addAcademic(formData);
-      console.log(res)
-      alert("Datos guardados correctamente")
+      console.log(res);
+      alert("Datos guardados correctamente");
       window.location.reload();
     } catch (error) {
-      alert("Error al guardar los datos")
-      console.log(error)
+      alert("Error al guardar los datos");
+      console.log(error);
     }
   };
 
@@ -219,7 +219,7 @@ function CreateDialog({ closeDialog }) {
             type="text"
             name="Día"
             value={formData["Día"]}
-            placeholder="Lu, Ma, Mi, Ju, Vi, Sa" 
+            placeholder="Lu, Ma, Mi, Ju, Vi, Sa"
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
@@ -312,7 +312,7 @@ function CreateDialog({ closeDialog }) {
         <div className="col-span-2 text-center mt-4">
           <button
             type="submit"
-            className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+            className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
           >
             Crear
           </button>

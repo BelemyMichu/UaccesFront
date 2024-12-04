@@ -40,10 +40,10 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     try {
       const res = await editAcademic(formData);
       console.log(res);
-      alert("Datos actualizados correctamente")
+      alert("Datos actualizados correctamente");
       window.location.reload();
     } catch (error) {
-      alert("Error al actualizar los datos")
+      alert("Error al actualizar los datos");
       console.log(error);
     }
   };
@@ -302,7 +302,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
         <div className="col-span-2 text-center mt-4">
           <button
             type="submit"
-            className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+            className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
           >
             Enviar
           </button>

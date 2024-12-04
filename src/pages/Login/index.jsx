@@ -72,11 +72,11 @@ function LoginPage() {
         true
       );
       scanner.render(success, error);
-    // } else {
-    //   const run = extractRUT(
-    //     "https://portal.sidiv.registrocivil.cl/docstatus?RUN=..."
-    //   );
-    //   setQrResult(run);
+      // } else {
+      //   const run = extractRUT(
+      //     "https://portal.sidiv.registrocivil.cl/docstatus?RUN=..."
+      //   );
+      //   setQrResult(run);
     }
   }, [selectedBtn]);
 
@@ -92,10 +92,10 @@ function LoginPage() {
   }, []);
   return (
     <AuthTemplate>
-      <div className="flex items-center justify-center h-screen bg-purple-200">
+      <div className="flex items-center justify-center h-screen bg-light-purple">
         <div className="flex sm:max-lg:flex-col shadow-lg rounded-lg overflow-hidden lg:max-w-4xl">
           {/* Sección de bienvenida */}
-          <div className="w-1/2 sm:max-lg:w-full bg-purple-300 p-10 flex flex-col items-center justify-center">
+          <div className="w-1/2 sm:max-lg:w-full bg-custom-blue p-10 flex flex-col items-center justify-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
               ¡Bienvenido a Uaccess!
             </h1>
@@ -111,13 +111,13 @@ function LoginPage() {
                 </h2>
                 <button
                   onClick={() => setSelectedBtn("qrButton")}
-                  className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                  className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 >
                   Profesor o Mantención
                 </button>
                 <button
                   onClick={() => setSelectedBtn("adminButton")}
-                  className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 duration-200"
+                  className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 duration-200"
                 >
                   Administración
                 </button>
@@ -138,7 +138,7 @@ function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red"
                   />
                 </div>
                 <div>
@@ -150,25 +150,25 @@ function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red"
                   />
                 </div>
-                <div className="text-right text-sm">
+                {/*<div className="text-right text-sm">
                   <a href="#" className="text-purple-500 hover:underline">
                     ¿Olvidaste tu contraseña?
                   </a>
-                </div>
+                </div>*/}
                 <div className="flex  flex-row justify-around flex-wrap">
                   <button
                     type="button"
                     onClick={() => setSelectedBtn("")}
-                    className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                    className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                   >
                     Volver
                   </button>
                   <button
                     type="submit"
-                    className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                    className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                   >
                     Iniciar Sesión
                   </button>
@@ -196,7 +196,7 @@ function LoginPage() {
                 </div>
                 <button
                   onClick={() => setSelectedBtn("")}
-                  className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                  className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 >
                   Volver
                 </button>
