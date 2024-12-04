@@ -19,10 +19,10 @@ function IndexPage() {
   }, []);
   return (
     <AuthTemplate>
-      <div className="flex items-center justify-center h-screen bg-purple-200">
+      <div className="flex items-center justify-center h-screen bg-light-purple">
         <div className="flex sm:max-lg:flex-col shadow-lg rounded-lg overflow-hidden lg:max-w-4xl">
           {/* Sección de bienvenida */}
-          <div className="w-1/2 sm:max-lg:w-full bg-purple-300 p-10 flex flex-col items-center justify-center">
+          <div className="w-1/2 sm:max-lg:w-full bg-custom-blue p-10 flex flex-col items-center justify-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
               ¡Bienvenido a Uaccess!
             </h1>
@@ -37,13 +37,13 @@ function IndexPage() {
               </h2>
               <button
                 onClick={() => navigate("/login/qr")}
-                className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
               >
                 Profesor o Mantención
               </button>
               <button
                 onClick={() => navigate("/login")}
-                className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 duration-200"
+                className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 duration-200"
               >
                 Administración
               </button>

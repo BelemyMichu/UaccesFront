@@ -117,7 +117,7 @@ function CreateDialog({ closeDialog }) {
         <div className="text-center mt-4">
           <button
             type="submit"
-            className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+            className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
           >
             Registrar Usuario
           </button>

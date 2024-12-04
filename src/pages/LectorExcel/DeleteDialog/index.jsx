@@ -51,7 +51,7 @@ const DeleteDialog = ({ data, closeDialog }) => {
           </button>
           <button
             onClick={() => closeDialog(false)}
-            className="bg-purple-500 text-white px-4 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors w-[150px]"
+            className="bg-custom-red text-white px-4 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors w-[150px]"
           >
             No, cerrar
           </button>

@@ -141,7 +141,7 @@ const Asistencias = () => {
             <div className="flex flex-row gap-4 items-center">
               <button
                 onClick={handleBackDate}
-                className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 disabled={actualDay === 1}
               >
                 <span>Atrás</span>
@@ -151,7 +151,7 @@ const Asistencias = () => {
               </span>
               <button
                 onClick={handleFowardDate}
-                className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 disabled={actualDay === 6}
               >
                 <span>Adelante</span>
@@ -169,20 +169,20 @@ const Asistencias = () => {
                 />
                 <button
                   onClick={handleTeacherFilter}
-                  className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                  className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 >
                   <span>Buscar</span>
                 </button>
                 <button
                   onClick={(e) => handleClearSearch(e)}
-                  className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                  className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
                 >
                   <span>Limpiar</span>
                 </button>
               </form>
               <button
                 onClick={getAusentes}
-                className="bg-purple-500 text-white px-2 py-2 font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+                className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
               >
                 <span>Marcar ausentes</span>
               </button>
