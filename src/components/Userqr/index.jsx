@@ -78,11 +78,11 @@ const Userqr = ({ rut, sala, sede }) => {
     }
   };
   useEffect(() => {
-    if (rut) {
+    if (rut !== user.rut) {
       getUserByRUT(rut);
       console.log(rut, sala);
     }
-  }, [rut]);
+  }, []);
   return (
     <div className="w-full h-full text-center flex flex-col gap-2">
       <h2 className="text-xl">Hola {user.nombre}!</h2>
