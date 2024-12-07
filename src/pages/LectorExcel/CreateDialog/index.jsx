@@ -2,8 +2,10 @@ import { useState } from "react";
 import Dialog from "../../../components/templates/Dialog";
 
 import { addAcademic } from "../../../services/supabase/academic";
+import { getUserByRUTAPI } from "../../../services/supabase/users";
 
 function CreateDialog({ closeDialog }) {
+  const [error, setError] = useState([]);
   const [formData, setFormData] = useState({
     Facultad: "",
     Campus: "",
@@ -26,6 +28,35 @@ function CreateDialog({ closeDialog }) {
     "Fecha Fin": "",
   });
 
+  const validateRUT = (rut) => {
+    // Eliminar puntos y guiones
+    const cleanRUT = rut.replace(/[^\dkK]/g, "").toUpperCase();
+
+    // Separar número y dígito verificador
+    const body = cleanRUT.slice(0, -1);
+    const dv = cleanRUT.slice(-1);
+    console.log(body, dv);
+
+    // Validar largo
+    if (body.length < 7 || isNaN(body)) return false;
+
+    // Calcular dígito verificador esperado
+    let sum = 0;
+    let multiplier = 2;
+
+    for (let i = body.length - 1; i >= 0; i--) {
+      sum += parseInt(body[i]) * multiplier;
+      multiplier = multiplier === 7 ? 2 : multiplier + 1;
+    }
+
+    const expectedDV = 11 - (sum % 11);
+    const formattedDV =
+      expectedDV === 11 ? "0" : expectedDV === 10 ? "K" : `${expectedDV}`;
+
+    // Comparar con el dígito verificador ingresado
+    return dv === formattedDV;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -36,12 +67,38 @@ function CreateDialog({ closeDialog }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Datos del formulario:", formData);
+    let errors = [];
+
+    if (!validateRUT(formData["RUT Profesor"])) {
+      errors.push({ error: "El RUT ingresado no es válido" });
+    }
+
+    if (formData["Hora Fin"] < formData["Hora Inicio"]) {
+      errors.push({
+        error: "La hora de finalización no puede ser menor a la inicial",
+      });
+    }
+
+    if (formData["Fecha Fin"] < formData["Fecha Inicio"]) {
+      errors.push({
+        error: "La fecha final no puede ser menor a la fecha de inicio",
+      });
+    }
+
+    if (errors.length > 0) {
+      setError(errors);
+      return; // Detenemos la ejecución si hay errores
+    }
     try {
-      const res = await addAcademic(formData);
-      console.log(res);
-      alert("Datos guardados correctamente");
-      window.location.reload();
+      const userRes = await getUserByRUTAPI(formData["RUT Profesor"]);
+      if (userRes.length > 0) {
+        const res = await addAcademic(formData);
+        console.log(res);
+        alert("Datos guardados correctamente");
+        window.location.reload();
+      } else {
+        setError("RUT no existente");
+      }
     } catch (error) {
       alert("Error al guardar los datos");
       console.log(error);
@@ -59,9 +116,19 @@ function CreateDialog({ closeDialog }) {
           X
         </span>
       </div>
+      {error.length > 0 &&
+        error.map((err, index) => (
+          <div
+            key={index}
+            className="flex flex-row justify-between items-center bg-red-200 p-2 rounded-md mb-4"
+          >
+            <span>{err.error}</span>
+            <button onClick={() => setError([])}>X</button>
+          </div>
+        ))}
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-2 gap-4 w-[600px] h-[600px] px-4 overflow-y-scroll"
+        className="grid grid-cols-2 gap-4 w-[600px] min-w-[200px] h-[600px] px-4 overflow-y-scroll"
       >
         <div>
           <label className="block text-sm font-medium mb-1">Facultad</label>

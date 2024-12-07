@@ -5,6 +5,7 @@ import { addUser } from "../../../services/supabase/users";
 import { hashPassword } from "../../../functions/bct";
 
 function CreateDialog({ closeDialog }) {
+  const [error, setError] = useState([]);
   const [formData, setFormData] = useState({
     rut: "",
     nombre: "",
@@ -21,26 +22,72 @@ function CreateDialog({ closeDialog }) {
     });
   };
 
+  const validateRUT = (rut) => {
+    // Eliminar puntos y guiones
+    const cleanRUT = rut.replace(/[^\dkK]/g, "").toUpperCase();
+
+    // Separar número y dígito verificador
+    const body = cleanRUT.slice(0, -1);
+    const dv = cleanRUT.slice(-1);
+    console.log(body, dv);
+
+    // Validar largo
+    if (body.length < 7 || isNaN(body)) return false;
+
+    // Calcular dígito verificador esperado
+    let sum = 0;
+    let multiplier = 2;
+
+    for (let i = body.length - 1; i >= 0; i--) {
+      sum += parseInt(body[i]) * multiplier;
+      multiplier = multiplier === 7 ? 2 : multiplier + 1;
+    }
+
+    const expectedDV = 11 - (sum % 11);
+    const formattedDV =
+      expectedDV === 11 ? "0" : expectedDV === 10 ? "K" : `${expectedDV}`;
+
+    // Comparar con el dígito verificador ingresado
+    return dv === formattedDV;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let errors = [];
+
     console.log("Datos del formulario sin contraseña hasheada:", formData);
+
+    if (!validateRUT(formData.rut)) {
+      errors.push({ error: "El RUT ingresado no es válido" });
+    }
 
     // Validar que la contraseña no esté vacía
     if (!formData.password) {
-      alert("La contraseña es obligatoria.");
-      return;
+      errors.push({ error: "La contraseña es obligatoria" });
+    } else if (formData.password.length < 6) {
+      errors.push({ error: "La contraseña debe tener al menos 6 caracteres" });
     }
 
     // Hashear la contraseña antes de enviarla
     const hashedPassword = hashPassword(formData.password);
     const dataToSend = { ...formData, password: hashedPassword };
 
+    if (errors.length > 0) {
+      setError(errors);
+      return; // Detenemos la ejecución si hay errores
+    }
+
     try {
       const res = await addUser(dataToSend);
+
       console.log("Usuario creado exitosamente:", res);
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.error("Error al crear el usuario:", error);
+      if (error.supabaseCode === 23505) {
+        errors = [{ error: error.message }];
+        setError(errors);
+      }
     }
   };
 
@@ -55,6 +102,16 @@ function CreateDialog({ closeDialog }) {
           X
         </span>
       </div>
+      {error.length > 0 &&
+        error.map((err, index) => (
+          <div
+            key={index}
+            className="flex flex-row justify-between items-center bg-red-200 p-2 rounded-md mb-4"
+          >
+            <span>{err.error}</span>
+            <button onClick={() => setError([])}>X</button>
+          </div>
+        ))}
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-4 w-[400px]"

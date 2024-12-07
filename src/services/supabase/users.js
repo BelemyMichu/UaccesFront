@@ -43,12 +43,18 @@ export const addUser = async (formData) => {
   try {
     const { data, error } = await supabase.from("usuarios").insert(formData);
     if (error) {
-      console.error("Error al insertar datos:", error.message);
+      console.error("Error al insertar datos:", error);
+      throw "El RUT ya existe";
     } else {
       console.log("Datos insertados correctamente:", data);
     }
   } catch (err) {
-    console.error("Error en la operación:", err.message);
+    console.error("Error en la operación:", err);
+    throw {
+      code: 409,
+      supabaseCode: 23505,
+      message: "El RUT ya existe"
+    };
   }
 };
 
