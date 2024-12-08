@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import Ropita from "../../components/templates/Ropita";
 import { EditDialog } from "./EditDialog";
 import { DeleteDialog } from "./DeleteDialog";
+import { DeleteAllDialog } from "./DeleteAllDialog";
 import { CreateDialog } from "./CreateDialog";
 
 import {
@@ -25,6 +26,8 @@ function LectorExcel() {
   const [deleteData, setDeleteData] = useState({});
 
   const [showCreate, setShowCreate] = useState(false);
+
+  const [showDeleteAll, setShowDeleteAll] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -154,18 +157,6 @@ function LectorExcel() {
     setDeleteData(row);
   };
 
-  const handleDeleteAll = async () => {
-    try {
-      const res = await deleteAllAcademic();
-      console.log(res);
-      alert("Datos eliminados correctamente");
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      alert("Error al eliminar toda la programación académica");
-    }
-  };
-
   const getData = async () => {
     try {
       const res = await getProgramacionAcademica();
@@ -203,7 +194,7 @@ function LectorExcel() {
               Agregar un nuevo horario
             </button>
             <button
-              onClick={() => handleDeleteAll()}
+              onClick={() => setShowDeleteAll(true)}
               className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
             >
               Eliminar toda la programación académica
@@ -410,6 +401,7 @@ function LectorExcel() {
         <DeleteDialog data={deleteData} closeDialog={setShowDelete} />
       )}
       {showCreate && <CreateDialog closeDialog={setShowCreate} />}
+      {showDeleteAll && <DeleteAllDialog closeDialog={setShowDeleteAll} />}
     </Ropita>
   );
 }
