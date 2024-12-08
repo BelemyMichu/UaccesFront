@@ -3,7 +3,7 @@ import Ropita from "../../components/templates/Ropita";
 import { getTodayProfes } from "../../services/supabase/academic";
 import {
   createAsistencia,
-  getAsistencias,
+  getAsistenciaByWeek,
 } from "../../services/supabase/asistencia";
 
 const Asistencias = () => {
@@ -113,7 +113,7 @@ const Asistencias = () => {
 
   const getData = async () => {
     try {
-      const res = await getAsistencias();
+      const res = await getAsistenciaByWeek();
       console.log(res);
       setExcelData(res);
 
@@ -145,7 +145,6 @@ const Asistencias = () => {
               <button
                 onClick={handleBackDate}
                 className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
-                disabled={actualDay === 1}
               >
                 <span>Atrás</span>
               </button>
@@ -155,7 +154,6 @@ const Asistencias = () => {
               <button
                 onClick={handleFowardDate}
                 className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
-                disabled={actualDay === 6}
               >
                 <span>Adelante</span>
               </button>

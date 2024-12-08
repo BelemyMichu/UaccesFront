@@ -65,11 +65,7 @@ export const leerExcelYSubir = async (
         }
 
         // Si el valor es una fecha, lo formatea (si aplica)
-        if (
-          header.toLowerCase().includes("fecha") &&
-          value &&
-          type !== "user"
-        ) {
+        if (header.toLowerCase().includes("fecha") && value) {
           value = formatDate(value);
         }
 
@@ -78,14 +74,19 @@ export const leerExcelYSubir = async (
       return obj;
     });
 
+    // Filtra filas con fechas inválidas
+    const validData = dataToInsert.filter((row) => {
+      return Object.values(row).every((val) => val !== null);
+    });
+
     // Inserta los datos en Supabase
     try {
       const { data: supabaseData, error } = await supabase
         .from(type === "user" ? "usuarios" : "programacion_academica") // Nombre de la tabla
-        .insert(dataToInsert);
+        .insert(validData);
 
       if (error) {
-        console.error("Error al insertar datos:", error.message);
+        console.error("Error al insertar datos:", error);
       } else {
         console.log("Datos insertados correctamente:", supabaseData);
       }

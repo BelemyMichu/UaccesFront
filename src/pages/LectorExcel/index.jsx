@@ -7,7 +7,10 @@ import { EditDialog } from "./EditDialog";
 import { DeleteDialog } from "./DeleteDialog";
 import { CreateDialog } from "./CreateDialog";
 
-import { getProgramacionAcademica } from "../../services/supabase/academic";
+import {
+  getProgramacionAcademica,
+  deleteAllAcademic,
+} from "../../services/supabase/academic";
 
 function LectorExcel() {
   const [excelData, setExcelData] = useState([]);
@@ -26,18 +29,35 @@ function LectorExcel() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
+  // Estados para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10; // Número de filas por página
+
+  // Calcular datos mostrados por página
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  // Manejar búsqueda
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-
-    const filtered = excelData.filter((row) => {
-      // Revisa cada valor de las filas y busca coincidencias
-      return Object.values(row).some((val) =>
+    const filtered = excelData.filter((row) =>
+      Object.values(row).some((val) =>
         String(val).toLowerCase().includes(value.toLowerCase())
-      );
-    });
-
+      )
+    );
     setFilteredData(filtered);
+    setCurrentPage(1); // Reinicia a la primera página
+  };
+
+  // Manejar cambio de página
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -66,19 +86,59 @@ function LectorExcel() {
       leerExcelYSubir(file);
       const reader = new FileReader();
       reader.onload = (event) => {
-        const fileData = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(fileData, { type: "array" });
+        const byteData = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(byteData, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        const processedData = jsonData.map((row) => ({
-          ...row,
-          "Hora Inicio": convertirTiempo(row["Hora Inicio"]), // Asegúrate de usar el nombre exacto de la columna
-          "Hora Fin": convertirTiempo(row["Hora Fin"]), // Asegúrate de usar el nombre exacto de la columna
-        }));
+        // Asegúrate de separar encabezados y datos correctamente
+        const headers = jsonData[0]; // Primera fila como encabezados
+        const rows = jsonData.slice(1); // Resto de filas como datos
 
-        //console.log(processedData);
-        setExcelData(processedData);
+        // Función para convertir decimal a formato HH:MM:SS
+        const decimalToTime = (decimal) => {
+          const totalSeconds = Math.round(decimal * 24 * 3600);
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+          return `${hours.toString().padStart(2, "0")}:${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        };
+
+        // Prepara los datos para subir a Supabase
+        const dataToInsert = rows.map((row) => {
+          let obj = {};
+          headers.forEach((header, index) => {
+            let value =
+              row[index] !== undefined ? row[index].toString().trim() : null;
+
+            // Si el encabezado sugiere que es un tiempo, convierte el valor decimal
+            if (
+              header.toLowerCase().includes("hora") && // Detecta columnas de tiempo
+              value &&
+              !isNaN(value) // Verifica si es un número
+            ) {
+              value = decimalToTime(parseFloat(value)); // Convierte el valor decimal a HH:MM:SS
+            }
+
+            // Si el valor es una fecha, lo formatea (si aplica)
+            if (header.toLowerCase().includes("fecha") && value) {
+              value = formatDate(value);
+            }
+
+            obj[header] = value;
+          });
+          return obj;
+        });
+
+        // Filtra filas con fechas inválidas
+        const validData = dataToInsert.filter((row) => {
+          return Object.values(row).every((val) => val !== null);
+        });
+
+        setExcelData(validData);
+        alert("Datos cargados correctamente");
       };
       reader.readAsArrayBuffer(file);
     }
@@ -92,6 +152,18 @@ function LectorExcel() {
   const handleDelete = async (row) => {
     setShowDelete(true);
     setDeleteData(row);
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      const res = await deleteAllAcademic();
+      console.log(res);
+      alert("Datos eliminados correctamente");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      alert("Error al eliminar toda la programación académica");
+    }
   };
 
   const getData = async () => {
@@ -129,6 +201,12 @@ function LectorExcel() {
               className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
             >
               Agregar un nuevo horario
+            </button>
+            <button
+              onClick={() => handleDeleteAll()}
+              className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
+            >
+              Eliminar toda la programación académica
             </button>
           </div>
           <input
@@ -171,18 +249,7 @@ function LectorExcel() {
           </div>
         )}
 
-        {/* Mostrar los datos leídos del archivo Excel */}
-        {/* {excelData.length > 0 && (
-          <div>
-            <h2>Datos del archivo Excel:</h2>
-            <ul>
-              {excelData.map((row, index) => (
-                <li key={index}>{JSON.stringify(row)}</li>
-              ))}
-            </ul>
-          </div>
-        )} */}
-        {excelData.length > 0 ? (
+        {currentRows.length > 0 ? (
           <div className="overflow-x-auto w-full rounded-lg">
             <table className="min-w-full bg-purple-white text-center rounded-lg">
               <thead>
@@ -236,18 +303,12 @@ function LectorExcel() {
                     Capacidad de la sala
                   </th>
                   <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Fecha inicio
-                  </th>
-                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
-                    Fecha fin
-                  </th>
-                  <th className="p-4 border-b-2 border-gray-500 hover:bg-gray-200 duration-200">
                     Acciones
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row, index) => (
+                {currentRows.map((row, index) => (
                   <tr key={index}>
                     <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       {row["Facultad"]}
@@ -298,12 +359,6 @@ function LectorExcel() {
                       {row["Capacidad Sala"]}
                     </td>
                     <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                      {row["Fecha Inicio"]}
-                    </td>
-                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
-                      {row["Fecha Fin"]}
-                    </td>
-                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       <button
                         onClick={() => handleEdit(row)}
                         className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors w-full mb-2"
@@ -321,6 +376,26 @@ function LectorExcel() {
                 ))}
               </tbody>
             </table>
+            {/* Controles de paginación */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         ) : (
           <div className="text-center rounded-lg w-full p-4">

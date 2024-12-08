@@ -5,9 +5,7 @@ const supabase = createClient(config.supabaseUrl, config.supabaseKey);
 
 export const createAsistencia = async (formData) => {
   try {
-    const { data, error } = await supabase
-      .from("asistencia")
-      .insert(formData);
+    const { data, error } = await supabase.from("asistencia").insert(formData);
 
     if (error) {
       console.error("Error al insertar datos:", error.message);
@@ -22,12 +20,25 @@ export const createAsistencia = async (formData) => {
 
 export const getAsistencias = async () => {
   try {
-    const { data, error } = await supabase
-      .from("asistencia")
-      .select("*");
+    const { data, error } = await supabase.from("asistencia").select("*");
     if (error) throw error;
     return data;
   } catch (error) {
     console.error("Error al obtener datos de asistencia:", error);
+  }
+};
+
+export const getAsistenciaByWeek = async () => {
+  try {
+    const { data, error } = await supabase.rpc("get_asistencia_same_week");
+
+    if (error) {
+      console.log(error);
+      throw error;
+    } else {
+      return data;
+    }
+  } catch (error) {
+    throw error;
   }
 };

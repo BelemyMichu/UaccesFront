@@ -26,6 +26,10 @@ const GestionUsuario = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
+  // Estados para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10; // Número de filas por página
+
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -38,6 +42,7 @@ const GestionUsuario = () => {
     });
 
     setFilteredData(filtered);
+    setCurrentPage(1); // Reiniciar a la primera página tras la búsqueda
   };
 
   const handleFileChange = (e) => {
@@ -90,6 +95,20 @@ const GestionUsuario = () => {
     file && setFile(null);
     fileName && setFileName("");
   }, []);
+
+  // Calcular datos mostrados por página
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <Ropita title="Gestion de usuarios">
       <div className="flex flex-col items-center justify-center">
@@ -168,7 +187,7 @@ const GestionUsuario = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row, index) => (
+                {currentRows.map((row, index) => (
                   <tr key={index}>
                     <td className="p-2 border-gray-500 hover:bg-gray-200 duration-200">
                       {row.nombre}
@@ -200,6 +219,26 @@ const GestionUsuario = () => {
                 ))}
               </tbody>
             </table>
+            {/* Controles de paginación */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                Anterior
+              </button>
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         ) : (
           <div className="text-center rounded-lg w-full p-4">

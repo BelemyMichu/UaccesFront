@@ -13,12 +13,12 @@ export const getUsuarios = async () => {
   }
 };
 
-export const editUser = async (formData) => {
+export const editUser = async (formData, originalRut) => {
   try {
     const { data, error } = await supabase
       .from("usuarios")
       .update(formData)
-      .eq("rut", formData.rut);
+      .eq("rut", originalRut);
     if (error) throw error;
     return data;
   } catch (error) {
@@ -43,12 +43,18 @@ export const addUser = async (formData) => {
   try {
     const { data, error } = await supabase.from("usuarios").insert(formData);
     if (error) {
-      console.error("Error al insertar datos:", error.message);
+      console.error("Error al insertar datos:", error);
+      throw "El RUT ya existe";
     } else {
       console.log("Datos insertados correctamente:", data);
     }
   } catch (err) {
-    console.error("Error en la operación:", err.message);
+    console.error("Error en la operación:", err);
+    throw {
+      code: 409,
+      supabaseCode: 23505,
+      message: "El RUT ya existe"
+    };
   }
 };
 
