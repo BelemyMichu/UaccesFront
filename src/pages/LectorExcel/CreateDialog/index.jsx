@@ -24,8 +24,6 @@ function CreateDialog({ closeDialog }) {
     "Hora Fin": "00:00:00",
     Sala: "",
     "Capacidad Sala": "",
-    "Fecha Inicio": "",
-    "Fecha Fin": "",
   });
 
   const validateRUT = (rut) => {
@@ -64,7 +62,6 @@ function CreateDialog({ closeDialog }) {
       [name]: name === "RUT Profesor" ? value.toUpperCase() : value, // Asegura mayúsculas
     });
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -284,16 +281,24 @@ function CreateDialog({ closeDialog }) {
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Día</label>
-          <input
-            type="text"
+          <select
             name="Día"
             value={formData["Día"]}
-            placeholder="Lu, Ma, Mi, Ju, Vi, Sa"
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            <option value="">Selecciona un día</option>
+            <option value="Lu">Lunes</option>
+            <option value="Ma">Martes</option>
+            <option value="Mi">Miércoles</option>
+            <option value="Ju">Jueves</option>
+            <option value="Vi">Viernes</option>
+            <option value="Sa">Sábado</option>
+            <option value="Do">Domingo</option>
+          </select>
         </div>
+
         <div>
           <label className="block text-sm font-medium mb-1">Hora Inicio</label>
           <input
@@ -351,28 +356,6 @@ function CreateDialog({ closeDialog }) {
             name="Capacidad Sala"
             placeholder="10"
             value={formData["Capacidad Sala"]}
-            onChange={handleChange}
-            className="border rounded w-full p-2"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Fecha inicio</label>
-          <input
-            type="date"
-            name="Fecha Inicio"
-            value={formData["Fecha Inicio"]}
-            onChange={handleChange}
-            className="border rounded w-full p-2"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Fecha fin</label>
-          <input
-            type="date"
-            name="Fecha Fin"
-            value={formData["Fecha Fin"]}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required

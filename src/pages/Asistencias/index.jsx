@@ -145,7 +145,6 @@ const Asistencias = () => {
               <button
                 onClick={handleBackDate}
                 className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
-                disabled={actualDay === 1}
               >
                 <span>Atrás</span>
               </button>
@@ -155,7 +154,6 @@ const Asistencias = () => {
               <button
                 onClick={handleFowardDate}
                 className="bg-custom-red text-white px-2 py-2 font-semibold rounded-xl hover:bg-custom-red-2 transition-colors"
-                disabled={actualDay === 6}
               >
                 <span>Adelante</span>
               </button>

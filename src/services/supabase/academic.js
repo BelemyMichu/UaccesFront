@@ -28,6 +28,18 @@ export const deleteAcademic = async (id) => {
   }
 };
 
+export const deleteAllAcademic = async () => {
+  try {
+    const { data, error } = await supabase.rpc("delete_programacion_academica");
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error al eliminar datos de programacion_academica:", error);
+    throw error;
+  }
+};
+
 export const editAcademic = async (formData) => {
   try {
     const dataToUpdate = Object.entries(formData).reduce(
@@ -96,12 +108,12 @@ export const getProfeByQR = async (rut, edificio, sala) => {
       input_edificio: edificio,
       input_sala: sala,
     });
-    console.log(data)
-    
+    console.log(data);
+
     if (error) {
       console.log(error);
       throw error;
-    } else { 
+    } else {
       if (data.length === 0) {
         throw "No hay profesores con clases en esta hora.";
       } else {
