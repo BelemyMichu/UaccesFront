@@ -6,7 +6,7 @@ const supabase = createClient(config.supabaseUrl, config.supabaseKey);
 export const getProgramacionAcademica = async () => {
   try {
     const { data, error } = await supabase
-      .from("programacion_academica_test")
+      .from("programacion_academica")
       .select("*");
     if (error) throw error;
     return data;
