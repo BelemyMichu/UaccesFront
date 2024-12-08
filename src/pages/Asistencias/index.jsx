@@ -3,7 +3,7 @@ import Ropita from "../../components/templates/Ropita";
 import { getTodayProfes } from "../../services/supabase/academic";
 import {
   createAsistencia,
-  getAsistencias,
+  getAsistenciaByWeek,
 } from "../../services/supabase/asistencia";
 
 const Asistencias = () => {
@@ -113,7 +113,7 @@ const Asistencias = () => {
 
   const getData = async () => {
     try {
-      const res = await getAsistencias();
+      const res = await getAsistenciaByWeek();
       console.log(res);
       setExcelData(res);
 

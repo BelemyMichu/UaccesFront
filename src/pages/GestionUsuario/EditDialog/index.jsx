@@ -22,7 +22,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "rut" ? value.toUpperCase() : value, // Asegura mayúsculas
     });
   };
 
