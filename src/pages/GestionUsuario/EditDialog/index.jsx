@@ -13,10 +13,9 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     correo: "",
     password: null, // Se usará para verificar si el usuario tiene contraseña
   });
-
-  let oldRut;
-
   const [showPasswordInput, setShowPasswordInput] = useState(false); // Controla si mostramos el input
+
+  const [originalRut, setOriginalRut] = useState(""); // Guardar el RUT original aquí
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +57,6 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = [];
-
     if (!validateRUT(formData.rut)) {
       errors.push({ error: "El RUT ingresado no es válido" });
     }
@@ -74,14 +72,14 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     }
 
     if (errors.length > 0) {
-      console.log(oldRut);
       setError(errors);
       return; // Detenemos la ejecución si hay errores
     }
     console.log("Datos del formulario con pass Hasheada:", formData);
     try {
-      const res = await editUser(formData);
+      const res = await editUser(formData, originalRut);
       console.log(res);
+      alert("Datos actualizados correctamente");
       window.location.reload();
     } catch (error) {
       console.error("Error al editar el usuario:", error);
@@ -92,8 +90,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     if (initialData) {
       setFormData((prev) => ({ ...prev, ...initialData }));
       setShowPasswordInput(initialData.password === null); // Mostrar campo si no tiene contraseña
-      console.log(initialData);
-      oldRut = initialData.rut;
+      setOriginalRut(initialData.rut); // Guardar el RUT original en el estado
     }
   }, [initialData]);
 
@@ -108,6 +105,16 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
           X
         </span>
       </div>
+      {error.length > 0 &&
+        error.map((err, index) => (
+          <div
+            key={index}
+            className="flex flex-row justify-between items-center bg-red-200 p-2 rounded-md mb-4"
+          >
+            <span>{err.error}</span>
+            <button onClick={() => setError([])}>X</button>
+          </div>
+        ))}
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-4 w-[400px]"

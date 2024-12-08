@@ -13,12 +13,12 @@ export const getUsuarios = async () => {
   }
 };
 
-export const editUser = async (formData) => {
+export const editUser = async (formData, originalRut) => {
   try {
     const { data, error } = await supabase
       .from("usuarios")
       .update(formData)
-      .eq("rut", formData.rut);
+      .eq("rut", originalRut);
     if (error) throw error;
     return data;
   } catch (error) {
