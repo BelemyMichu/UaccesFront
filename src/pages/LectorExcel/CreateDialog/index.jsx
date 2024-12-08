@@ -20,8 +20,8 @@ function CreateDialog({ closeDialog }) {
     "Tipo Actividad": "",
     Modalidad: "",
     Día: "",
-    "Hora Inicio": "",
-    "Hora Fin": "",
+    "Hora Inicio": "00:00:00",
+    "Hora Fin": "00:00:00",
     Sala: "",
     "Capacidad Sala": "",
     "Fecha Inicio": "",
@@ -61,12 +61,14 @@ function CreateDialog({ closeDialog }) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "RUT Profesor" ? value.toUpperCase() : value, // Asegura mayúsculas
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
     let errors = [];
 
     if (!validateRUT(formData["RUT Profesor"])) {
@@ -295,7 +297,7 @@ function CreateDialog({ closeDialog }) {
         <div>
           <label className="block text-sm font-medium mb-1">Hora Inicio</label>
           <input
-            type="text"
+            type="time"
             name="Hora Inicio"
             placeholder="HH:MM:SS"
             value={formData["Hora Inicio"]}
@@ -307,7 +309,7 @@ function CreateDialog({ closeDialog }) {
         <div>
           <label className="block text-sm font-medium mb-1">Hora Fin</label>
           <input
-            type="text"
+            type="time"
             name="Hora Fin"
             placeholder="HH:MM:SS"
             value={formData["Hora Fin"]}

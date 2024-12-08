@@ -18,9 +18,10 @@ function CreateDialog({ closeDialog }) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "rut" ? value.toUpperCase() : value, // Asegura mayúsculas
     });
   };
+  
 
   const validateRUT = (rut) => {
     // Eliminar puntos y guiones

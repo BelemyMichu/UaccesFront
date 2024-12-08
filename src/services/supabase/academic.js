@@ -88,6 +88,32 @@ export const getTodayProfes = async (dia) => {
   }
 };
 
+export const getProfeByQR = async (rut, edificio, sala) => {
+  console.log(rut, edificio, sala);
+  try {
+    const { data, error } = await supabase.rpc("get_profe_by_hour", {
+      input_rut: rut,
+      input_edificio: edificio,
+      input_sala: sala,
+    });
+    console.log(data)
+    
+    if (error) {
+      console.log(error);
+      throw error;
+    } else { 
+      if (data.length === 0) {
+        throw "No hay profesores con clases en esta hora.";
+      } else {
+        return data;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const getAcademicByRut = async (rut, sala, sede) => {
   try {
     const { data, error } = await supabase
