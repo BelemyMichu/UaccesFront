@@ -6,7 +6,7 @@ const supabase = createClient(config.supabaseUrl, config.supabaseKey);
 export const getProgramacionAcademica = async () => {
   try {
     const { data, error } = await supabase
-      .from("programacion_academica")
+      .from("programacion_academica_test")
       .select("*");
     if (error) throw error;
     return data;
@@ -85,6 +85,32 @@ export const getTodayProfes = async (dia) => {
     return data;
   } catch (error) {
     console.error("Error al obtener datos de programacion_academica:", error);
+  }
+};
+
+export const getProfeByQR = async (rut, edificio, sala) => {
+  console.log(rut, edificio, sala);
+  try {
+    const { data, error } = await supabase.rpc("get_profe_by_hour", {
+      input_rut: rut,
+      input_edificio: edificio,
+      input_sala: sala,
+    });
+    console.log(data);
+
+    if (error) {
+      console.log(error);
+      throw error;
+    } else {
+      if (data.length === 0) {
+        throw "No hay profesores con clases en esta hora.";
+      } else {
+        return data;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
