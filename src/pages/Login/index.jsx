@@ -33,7 +33,7 @@ const Login = () => {
             rol: res.data.rol,
             nombre: res.data.nombre,
           });
-          navigate("/histSalas");
+          navigate("/gestion-salas");
         } else {
           setError("Usuario no autorizado");
         }
@@ -87,7 +87,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red"
                 />
               </div>
               <div>
@@ -99,7 +99,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red"
                 />
               </div>
               <div className="flex  flex-row justify-around flex-wrap">

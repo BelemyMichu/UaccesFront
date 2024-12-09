@@ -33,7 +33,7 @@ const GestSalas = () => {
       console.log("Horarios obtenidos: ", data);
 
       const uniqueRooms = Array.from(
-        new Set(data.map((horario) => `${horario.edificio} ${horario.sala}`)),
+        new Set(data.map((horario) => `${horario.edificio} ${horario.sala}`))
       );
 
       setRoomOptions(uniqueRooms);
@@ -91,7 +91,7 @@ const GestSalas = () => {
         </div>
 
         {/* Tabla de Horarios */}
-        <table className="border-collapse border border-gray-400 w-full mt-4">
+        <table className="border-collapse border border-gray-400 bg-purple-white w-full mt-4">
           <thead className="bg-gray-100">
             <tr>
               <th className="border px-4 py-2">Horario ingreso</th>
@@ -105,25 +105,30 @@ const GestSalas = () => {
               horarios
                 .filter(
                   (horario) =>
-                    `${horario.edificio} ${horario.sala}` === selectedRoom,
+                    `${horario.edificio} ${horario.sala}` === selectedRoom
                 )
                 .map((horario) => (
-                  <tr key={horario.id} className="hover:bg-gray-50">
-                    <td className="border px-4 py-2">
+                  <tr key={horario.id}>
+                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       {horario["hora_inicio"]}
                     </td>
-                    <td className="border px-4 py-2">{horario["hora_fin"]}</td>
-                    <td className="border px-4 py-2">
+                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
+                      {horario["hora_fin"]}
+                    </td>
+                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       {horario["nombre_asignatura"]}
                     </td>
-                    <td className="border px-4 py-2">
+                    <td className="p-4 border-gray-500 hover:bg-gray-200 duration-200">
                       {horario["nombre_profesor"]}
                     </td>
                   </tr>
                 ))
             ) : (
               <tr>
-                <td colSpan="4" className="border px-4 py-2 text-center">
+                <td
+                  colSpan="4"
+                  className="p-4 border-gray-500 hover:bg-gray-200 duration-200 text-center"
+                >
                   No hay horarios disponibles
                 </td>
               </tr>

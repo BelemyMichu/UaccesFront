@@ -26,18 +26,12 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
   };
 
   const validateRUT = (rut) => {
-    // Eliminar puntos y guiones
     const cleanRUT = rut.replace(/[^\dkK]/g, "").toUpperCase();
-
-    // Separar número y dígito verificador
     const body = cleanRUT.slice(0, -1);
     const dv = cleanRUT.slice(-1);
-    console.log(body, dv);
 
-    // Validar largo
     if (body.length < 7 || isNaN(body)) return false;
 
-    // Calcular dígito verificador esperado
     let sum = 0;
     let multiplier = 2;
 
@@ -50,13 +44,13 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     const formattedDV =
       expectedDV === 11 ? "0" : expectedDV === 10 ? "K" : `${expectedDV}`;
 
-    // Comparar con el dígito verificador ingresado
     return dv === formattedDV;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = [];
+
     if (!validateRUT(formData.rut)) {
       errors.push({ error: "El RUT ingresado no es válido" });
     }
@@ -75,12 +69,13 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
       setError(errors);
       return; // Detenemos la ejecución si hay errores
     }
-    console.log("Datos del formulario con pass Hasheada:", formData);
+
     try {
       const res = await editUser(formData, originalRut);
       console.log(res);
       alert("Datos actualizados correctamente");
-      window.location.reload();
+      closeDialog(false); // Cierra el formulario
+      window.location.reload(); // Recarga la página
     } catch (error) {
       console.error("Error al editar el usuario:", error);
     }
@@ -143,14 +138,23 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Rol</label>
-          <input
-            type="text"
+          <select
             name="rol"
             value={formData.rol}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            <option value="" disabled>
+              Selecciona un rol
+            </option>
+            <option value="Secretaría">Secretaría</option>
+            <option value="Personal de Mantención">
+              Personal de Mantención
+            </option>
+            <option value="Profesor">Profesor</option>
+            <option value="Admin. Salas">Admin. Salas</option>
+          </select>
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Correo</label>

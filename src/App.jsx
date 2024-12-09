@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HistSalas from "./pages/HistSalas";
 import LectorExcel from "./pages/LectorExcel";
 import IndexPage from "./pages/IndexPage";
 import RegisterPage from "./pages/Register";
@@ -20,13 +19,11 @@ function App() {
         <Route path="/login/qr" element={<LoginQR />} />
 
         {/*Admin de salas*/}
-        <Route path="/histSalas" element={<HistSalas />} />
-        {/* <Route path="/reportes" element={<Reportes />} /> */}
+        <Route path="/gestion-usuarios" element={<GestionUsuario />} />
 
         {/*secretario*/}
         <Route path="/programacion-academica" element={<LectorExcel />} />
         <Route path="/asistencias" element={<Asistencias />} />
-        <Route path="/gestion-usuarios" element={<GestionUsuario />} />
         <Route path="/Reportes" element={<Reportes />} />
         <Route path="/gestion-salas" element={<GestSalas />} />
       </Routes>

@@ -7,38 +7,32 @@ import { getUserByRUTAPI } from "../../../services/supabase/users";
 function CreateDialog({ closeDialog }) {
   const [error, setError] = useState([]);
   const [formData, setFormData] = useState({
-    Facultad: "",
-    Campus: "",
-    Periodo: "",
+    Facultad: "INGE",
+    Campus: "ANTONIO VARAS",
+    Periodo: "202410",
     Curso: "",
     Sección: "",
-    Jornada: "",
+    Jornada: "REGULAR",
     NRC: "",
     "Nombre Profesor": "",
     "RUT Profesor": "",
     "Nombre Asignatura": "",
-    "Tipo Actividad": "",
-    Modalidad: "",
+    "Tipo Actividad": "Teórico",
+    Modalidad: "Presencial",
     Día: "",
-    "Hora Inicio": "00:00:00",
-    "Hora Fin": "00:00:00",
+    "Hora Inicio": "",
+    "Hora Fin": "",
+    Edificio: "A1",
     Sala: "",
     "Capacidad Sala": "",
   });
 
   const validateRUT = (rut) => {
-    // Eliminar puntos y guiones
     const cleanRUT = rut.replace(/[^\dkK]/g, "").toUpperCase();
-
-    // Separar número y dígito verificador
     const body = cleanRUT.slice(0, -1);
     const dv = cleanRUT.slice(-1);
-    console.log(body, dv);
-
-    // Validar largo
     if (body.length < 7 || isNaN(body)) return false;
 
-    // Calcular dígito verificador esperado
     let sum = 0;
     let multiplier = 2;
 
@@ -50,8 +44,6 @@ function CreateDialog({ closeDialog }) {
     const expectedDV = 11 - (sum % 11);
     const formattedDV =
       expectedDV === 11 ? "0" : expectedDV === 10 ? "K" : `${expectedDV}`;
-
-    // Comparar con el dígito verificador ingresado
     return dv === formattedDV;
   };
 
@@ -59,13 +51,12 @@ function CreateDialog({ closeDialog }) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === "RUT Profesor" ? value.toUpperCase() : value, // Asegura mayúsculas
+      [name]: name === "RUT Profesor" ? value.toUpperCase() : value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     let errors = [];
 
     if (!validateRUT(formData["RUT Profesor"])) {
@@ -78,21 +69,14 @@ function CreateDialog({ closeDialog }) {
       });
     }
 
-    if (formData["Fecha Fin"] < formData["Fecha Inicio"]) {
-      errors.push({
-        error: "La fecha final no puede ser menor a la fecha de inicio",
-      });
-    }
-
     if (errors.length > 0) {
       setError(errors);
-      return; // Detenemos la ejecución si hay errores
+      return;
     }
     try {
       const userRes = await getUserByRUTAPI(formData["RUT Profesor"]);
       if (userRes.length > 0) {
         const res = await addAcademic(formData);
-        console.log(res);
         alert("Datos guardados correctamente");
         window.location.reload();
       } else {
@@ -130,43 +114,40 @@ function CreateDialog({ closeDialog }) {
         className="grid grid-cols-2 gap-4 w-[600px] min-w-[200px] h-[600px] px-4 overflow-y-scroll"
       >
         <div>
-          <label className="block text-sm font-medium mb-1">Facultad</label>
+          <label>Facultad</label>
           <input
             type="text"
-            name="Facultad"
+            value="INGE"
+            disabled
             placeholder="INGE"
-            value={formData.Facultad}
-            onChange={handleChange}
             className="border rounded w-full p-2"
-            required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Campus</label>
+          <label>Campus</label>
           <input
             type="text"
-            name="Campus"
+            value="ANTONIO VARAS"
+            disabled
             placeholder="ANTONIO VARAS"
-            value={formData.Campus}
-            onChange={handleChange}
             className="border rounded w-full p-2"
-            required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Periodo</label>
-          <input
-            type="text"
+          <label>Periodo</label>
+          <select
             name="Periodo"
-            placeholder="202410"
             value={formData.Periodo}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            <option value="202410">202410</option>
+            <option value="202420">202420</option>
+          </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Curso</label>
+          <label>Curso</label>
           <input
             type="text"
             name="Curso"
@@ -178,7 +159,7 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Sección</label>
+          <label>Sección</label>
           <input
             type="text"
             name="Sección"
@@ -190,19 +171,17 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Jornada</label>
+          <label>Jornada</label>
           <input
             type="text"
-            name="Jornada"
+            value="REGULAR"
+            disabled
             placeholder="REGULAR"
-            value={formData.Jornada}
-            onChange={handleChange}
             className="border rounded w-full p-2"
-            required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">NRC</label>
+          <label>NRC</label>
           <input
             type="text"
             name="NRC"
@@ -214,9 +193,7 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Nombre Profesor
-          </label>
+          <label>Nombre Profesor</label>
           <input
             type="text"
             name="Nombre Profesor"
@@ -228,7 +205,7 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">RUT Profesor</label>
+          <label>RUT Profesor</label>
           <input
             type="text"
             name="RUT Profesor"
@@ -240,9 +217,7 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Nombre Asignatura
-          </label>
+          <label>Nombre Asignatura</label>
           <input
             type="text"
             name="Nombre Asignatura"
@@ -254,36 +229,33 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Tipo de Actividad
-          </label>
-          <input
-            type="text"
+          <label>Tipo de Actividad</label>
+          <select
             name="Tipo Actividad"
-            placeholder="Teorico"
             value={formData["Tipo Actividad"]}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            <option value="Teórico">Teórico</option>
+            <option value="Taller">Taller</option>
+          </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Modalidad</label>
+          <label>Modalidad</label>
           <input
             type="text"
-            name="Modalidad"
+            value="Presencial"
+            disabled
             placeholder="Presencial"
-            value={formData.Modalidad}
-            onChange={handleChange}
             className="border rounded w-full p-2"
-            required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Día</label>
+          <label>Día</label>
           <select
             name="Día"
-            value={formData["Día"]}
+            value={formData.Día}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
@@ -298,45 +270,82 @@ function CreateDialog({ closeDialog }) {
             <option value="Do">Domingo</option>
           </select>
         </div>
-
         <div>
-          <label className="block text-sm font-medium mb-1">Hora Inicio</label>
-          <input
-            type="time"
+          <label>Hora Inicio</label>
+          <select
             name="Hora Inicio"
-            placeholder="HH:MM:SS"
             value={formData["Hora Inicio"]}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            {[
+              "08:30",
+              "09:25",
+              "10:20",
+              "11:15",
+              "12:10",
+              "13:05",
+              "14:00",
+              "14:55",
+              "15:50",
+              "16:45",
+              "17:40",
+              "18:35",
+              "19:30",
+              "20:25",
+            ].map((hora) => (
+              <option key={hora} value={hora}>
+                {hora}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Hora Fin</label>
-          <input
-            type="time"
+          <label>Hora Fin</label>
+          <select
             name="Hora Fin"
-            placeholder="HH:MM:SS"
             value={formData["Hora Fin"]}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            {[
+              "09:15",
+              "10:10",
+              "12:00",
+              "12:55",
+              "13:50",
+              "14:45",
+              "15:40",
+              "16:35",
+              "17:30",
+              "18:25",
+              "19:20",
+              "20:15",
+              "21:10",
+            ].map((hora) => (
+              <option key={hora} value={hora}>
+                {hora}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Edificio</label>
-          <input
-            type="text"
+          <label>Edificio</label>
+          <select
             name="Edificio"
-            placeholder="A1"
             value={formData.Edificio}
             onChange={handleChange}
             className="border rounded w-full p-2"
             required
-          />
+          >
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+          </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Sala</label>
+          <label>Sala</label>
           <input
             type="text"
             name="Sala"
@@ -348,9 +357,7 @@ function CreateDialog({ closeDialog }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Capacidad de la sala
-          </label>
+          <label>Capacidad Sala</label>
           <input
             type="number"
             name="Capacidad Sala"
