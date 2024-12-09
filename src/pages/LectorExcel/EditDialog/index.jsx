@@ -77,7 +77,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
 
     console.log("Datos del formulario:", formData);
     try {
-      const res = await editAcademic(formData, oldRut);
+      const res = await editAcademic(formData);
       console.log(res);
       alert("Datos actualizados correctamente");
       window.location.reload();
