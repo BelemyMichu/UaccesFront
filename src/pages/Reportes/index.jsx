@@ -13,6 +13,7 @@ export default function Reportes() {
   const [endDate, setEndDate] = useState(null);
   const [isReportGenerated, setIsReportGenerated] = useState(false);
   const [salas, setSalas] = useState([]);
+  const [downloadUrl, setDownloadUrl] = useState("");
   const supabase = createClient(config.supabaseUrl, config.supabaseKey);
 
   const enviarDatosBackend = async (data) => {
@@ -25,7 +26,7 @@ export default function Reportes() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ input: JSON.stringify(data) }), // Mandar como string
-        }
+        },
       );
       if (!response.ok) {
         throw new Error("Error al enviar datos al backend");
@@ -44,9 +45,18 @@ export default function Reportes() {
 
       if (error) throw error;
 
-      setSalas(data); // Actualiza el estado local por si necesitas los datos.
-      await enviarDatosBackend(data); // Enviar los datos al backend.
-      setIsReportGenerated(true); // Marca el reporte como generado.
+      setSalas(data);
+      await enviarDatosBackend(data);
+      setIsReportGenerated(true);
+
+      const { data: fileData, error: fileError } = await supabase.storage
+        .from("Reporte")
+        .download("informes/reporte_profesional.pdf");
+
+      if (fileError) throw fileError;
+
+      const url = URL.createObjectURL(fileData);
+      setDownloadUrl(url);
     } catch (error) {
       console.error("Error al cargar datos de programacion_academica:", error);
     }
@@ -91,7 +101,7 @@ export default function Reportes() {
 
             <button
               className="w-[200px] bg-custom-red text-white py-2 rounded-lg hover:bg-custom-red-2 transition"
-              onClick={cargarSalasYGenerar} // Llama a la función para cargar y enviar datos
+              onClick={cargarSalasYGenerar}
             >
               Generar
             </button>
@@ -102,8 +112,9 @@ export default function Reportes() {
           <div className="mt-6 flex items-center">
             <p className="text-gray-700 mr-2">Descargar:</p>
             <a
-              href="#"
+              href={downloadUrl}
               className="flex items-center text-red-600 font-semibold hover:underline"
+              download="reporte.pdf"
             >
               <img src="pdf-icon.png" alt="PDF icon" className="w-5 h-5 mr-1" />{" "}
               PDF
