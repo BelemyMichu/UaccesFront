@@ -6,7 +6,10 @@ import {
   getAsistenciaByWeek,
 } from "../../services/supabase/asistencia";
 
+import Loading from "../../components/templates/Loading";
+
 const Asistencias = () => {
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [excelData, setExcelData] = useState([]);
   const [todayCourses, setTodayCourses] = useState([]);
@@ -127,8 +130,10 @@ const Asistencias = () => {
 
       setTodayCourses(cursosHoy);
       setActualDay(hoy.getDay());
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener datos de programación académica:", error);
+      setLoading(false);
     }
   };
 
@@ -139,6 +144,7 @@ const Asistencias = () => {
   return (
     <>
       <Ropita title="Asistencias">
+      {loading && <Loading />}
         <div className="w-full h-full">
           <div className="flex flex-row items-center justify-between gap-4 mb-4">
             <div className="flex flex-row gap-4 items-center">

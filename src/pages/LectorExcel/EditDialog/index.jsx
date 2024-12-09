@@ -4,6 +4,8 @@ import Dialog from "../../../components/templates/Dialog";
 import { editAcademic } from "../../../services/supabase/academic";
 
 const EditDialog = ({ initialData = {}, closeDialog }) => {
+  const [loading, setLoading] = useState(false);
+  const [oldRut, setOldRut] = useState("");
   const [error, setError] = useState([]);
   const [formData, setFormData] = useState({
     Facultad: "",
@@ -89,7 +91,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
 
     console.log("Datos del formulario:", formData);
     try {
-      const res = await editAcademic(formData);
+      const res = await editAcademic(formData, oldRut);
       console.log(res);
       alert("Datos actualizados correctamente");
       window.location.reload();
@@ -103,6 +105,7 @@ const EditDialog = ({ initialData = {}, closeDialog }) => {
     if (initialData) {
       setFormData((prev) => ({ ...prev, ...initialData }));
     }
+    setOldRut(initialData["RUT Profesor"]);
   }, [initialData]);
   return (
     <Dialog>

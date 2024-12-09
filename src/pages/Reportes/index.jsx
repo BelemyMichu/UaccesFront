@@ -5,10 +5,12 @@ import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { config } from "../../config";
 import { createClient } from "@supabase/supabase-js";
+import Loading from "../../components/templates/Loading";
 
 registerLocale("es", es);
 
 export default function Reportes() {
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isReportGenerated, setIsReportGenerated] = useState(false);
@@ -26,7 +28,7 @@ export default function Reportes() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ input: JSON.stringify(data) }), // Mandar como string
-        },
+        }
       );
       if (!response.ok) {
         throw new Error("Error al enviar datos al backend");
@@ -38,6 +40,7 @@ export default function Reportes() {
   };
 
   const cargarSalasYGenerar = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from("programacion_academica")
@@ -57,13 +60,16 @@ export default function Reportes() {
 
       const url = URL.createObjectURL(fileData);
       setDownloadUrl(url);
+      setLoading(false);
     } catch (error) {
       console.error("Error al cargar datos de programacion_academica:", error);
+      setLoading(false);
     }
   };
 
   return (
     <Ropita title="Reportes">
+      {loading && <Loading />}
       <div className="min-h-screen flex flex-col items-center py-12">
         <div className="bg-purple-white p-8 rounded-lg shadow-md w-full max-w-2xl">
           <div className="flex flex-col items-center">

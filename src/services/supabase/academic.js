@@ -40,7 +40,7 @@ export const deleteAllAcademic = async () => {
   }
 };
 
-export const editAcademic = async (formData) => {
+export const editAcademic = async (formData, oldRut) => {
   try {
     const dataToUpdate = Object.entries(formData).reduce(
       (acc, [key, value]) => {
@@ -54,7 +54,7 @@ export const editAcademic = async (formData) => {
     const { data, error } = await supabase
       .from("programacion_academica")
       .update(updateData)
-      .eq("id", formData.id);
+      .eq("id", oldRut);
     if (error) throw error;
     return data;
   } catch (error) {

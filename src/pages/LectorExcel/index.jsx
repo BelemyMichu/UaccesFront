@@ -8,12 +8,12 @@ import { DeleteDialog } from "./DeleteDialog";
 import { DeleteAllDialog } from "./DeleteAllDialog";
 import { CreateDialog } from "./CreateDialog";
 
-import {
-  getProgramacionAcademica,
-  deleteAllAcademic,
-} from "../../services/supabase/academic";
+import Loading from "../../components/templates/Loading";
+
+import { getProgramacionAcademica } from "../../services/supabase/academic";
 
 function LectorExcel() {
+  const [loading, setLoading] = useState(true);
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState(null);
@@ -85,6 +85,7 @@ function LectorExcel() {
   };
 
   const handleFileUpload = () => {
+    setLoading(true);
     if (file) {
       leerExcelYSubir(file);
       const reader = new FileReader();
@@ -142,6 +143,7 @@ function LectorExcel() {
 
         setExcelData(validData);
         alert("Datos cargados correctamente");
+        setLoading(false);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -162,8 +164,10 @@ function LectorExcel() {
       const res = await getProgramacionAcademica();
       setExcelData(res);
       setShowFileUpload(false);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener datos de programacion_academica:", error);
+      setLoading(false);
     }
   };
 
@@ -178,6 +182,7 @@ function LectorExcel() {
   }, []);
   return (
     <Ropita title="Programación académica">
+      {loading && <Loading />}
       <div className="flex flex-col items-center justify-center">
         <div className="text-center rounded-lg w-full p-2 flex justify-between sm:max-lg:flex-col">
           <div className="flex gap-4 sm:max-lg:flex-col">

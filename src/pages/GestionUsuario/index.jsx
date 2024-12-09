@@ -8,8 +8,10 @@ import { DeleteDialog } from "./DeleteDialog";
 import { CreateDialog } from "./CreateDialog";
 
 import { getUsuarios } from "../../services/supabase/users";
+import Loading from "../../components/templates/Loading";
 
 const GestionUsuario = () => {
+  const [loading, setLoading] = useState(true);
   const [excelData, setExcelData] = useState([]);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState(null);
@@ -85,8 +87,10 @@ const GestionUsuario = () => {
       setExcelData(res);
       setFilteredData(res);
       setShowFileUpload(false);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener datos de usuarios:", error);
+      setLoading(false);
     }
   };
 
@@ -111,6 +115,7 @@ const GestionUsuario = () => {
 
   return (
     <Ropita title="Gestion de usuarios">
+      {loading && <Loading />}
       <div className="flex flex-col items-center justify-center">
         <div className="text-center rounded-lg w-full p-2 flex justify-between sm:max-lg:flex-col">
           <div className="flex gap-4 sm:max-lg:flex-col">
