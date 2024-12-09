@@ -8,10 +8,10 @@ import GestionUsuario from "./pages/GestionUsuario";
 import Reportes from "./pages/Reportes";
 import LoginQR from "./pages/LoginQR";
 import Login from "./pages/Login";
+import GestSalas from "./pages/GestSalas";
 
 function App() {
   return (
-    
     <Router>
       <Routes>
         <Route path="/" element={<IndexPage />} />
@@ -28,7 +28,7 @@ function App() {
         <Route path="/asistencias" element={<Asistencias />} />
         <Route path="/gestion-usuarios" element={<GestionUsuario />} />
         <Route path="/Reportes" element={<Reportes />} />
-
+        <Route path="/gestion-salas" element={<GestSalas />} />
       </Routes>
     </Router>
   );
